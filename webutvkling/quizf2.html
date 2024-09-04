@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webutvikling - Forelesning 2 Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2>Webutvikling - Forelesning 2 Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Sjekk svar</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    // Spørsmål og svar
+    const quizData = [
+        {
+            question: "Hva er forskjellen mellom et nettsted og en nettside?",
+            answers: [
+                "En nettside er en samling av flere sider, mens et nettsted er en enkel HTML-side",
+                "En nettside er en enkel HTML-side, mens et nettsted er en samling av flere sider",
+                "Det er ingen forskjell",
+                "En nettside er en type database, mens et nettsted er et brukergrensesnitt"
+            ],
+            correct: "En nettside er en enkel HTML-side, mens et nettsted er en samling av flere sider"
+        },
+        {
+            question: "Hva er frontend i webutvikling?",
+            answers: [
+                "Alt som skjer bak nettsiden som brukeren ikke ser",
+                "Brukergrensesnittet som brukeren ser",
+                "En type server",
+                "En form for database"
+            ],
+            correct: "Brukergrensesnittet som brukeren ser"
+        },
+        {
+            question: "Hva refererer 'backend' til?",
+            answers: [
+                "Alt som skjer bak nettsiden som brukeren ikke ser",
+                "Brukergrensesnittet som brukeren ser",
+                "Nettsidens design",
+                "Innholdet på nettsiden"
+            ],
+            correct: "Alt som skjer bak nettsiden som brukeren ikke ser"
+        },
+        {
+            question: "Hva omfatter 'design' på en nettside?",
+            answers: [
+                "Tekst og bilder",
+                "Interaktive elementer som knapper",
+                "Skrifttyper, farger og layout",
+                "Funksjonalitet"
+            ],
+            correct: "Skrifttyper, farger og layout"
+        },
+        {
+            question: "Hva er primærinnholdet på en nettside?",
+            answers: [
+                "Server",
+                "Design",
+                "Tekst, bilder, video",
+                "URL"
+            ],
+            correct: "Tekst, bilder, video"
+        },
+        {
+            question: "Hva er en hyperkobling?",
+            answers: [
+                "En fysisk link mellom to fysiske steder",
+                "En lenke som knytter nettsider til hverandre",
+                "En type database",
+                "En spesifikk type font"
+            ],
+            correct: "En lenke som knytter nettsider til hverandre"
+        },
+        {
+            question: "Hva menes med 'funksjonalitet' på en nettside?",
+            answers: [
+                "Visuelle elementer som skrifttyper",
+                "Interaktive elementer som knapper og skjemaer",
+                "Teksten og bildene på nettsiden",
+                "Design og layout"
+            ],
+            correct: "Interaktive elementer som knapper og skjemaer"
+        },
+        {
+            question: "Hva er en URL?",
+            answers: [
+                "En type server",
+                "En webadresse som peker til en nettside",
+                "En type designmal",
+                "En database"
+            ],
+            correct: "En webadresse som peker til en nettside"
+        },
+        {
+            question: "Hva betyr 'tilgjengelighet' i webutvikling?",
+            answers: [
+                "Hvor raskt nettsiden lastes",
+                "Hvor lett det er for brukere med funksjonshemninger å bruke nettsiden",
+                "Hvordan nettsiden ser ut på ulike enheter",
+                "Hvordan du får tilgang til serveren"
+            ],
+            correct: "Hvor lett det er for brukere med funksjonshemninger å bruke nettsiden"
+        },
+        {
+            question: "Hva refererer til 'HTML'?",
+            answers: [
+                "En type designverktøy",
+                "En spesifikasjon for webdesign",
+                "En markup-språk brukt for å lage nettsider",
+                "En type serverteknologi"
+            ],
+            correct: "En markup-språk brukt for å lage nettsider"
+        },
+        {
+            question: "Hva er et eksempel på 'backend' teknologi?",
+            answers: [
+                "CSS",
+                "JavaScript",
+                "HTML",
+                "Databaser"
+            ],
+            correct: "Databaser"
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz');
+
+    function loadQuiz() {
+        quizData.forEach((q, index) => {
+            let questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `<p>${q.question}</p>`;
+
+            let answersElement = document.createElement('ul');
+            answersElement.classList.add('answers');
+            q.answers.forEach(answer => {
+                answersElement.innerHTML += `
+                    <li>
+                        <input type="radio" name="question${index}" value="${answer}"> ${answer}
+                    </li>
+                `;
+            });
+
+            questionElement.appendChild(answersElement);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        quizData.forEach((q, index) => {
+            let selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+            let answerElements = document.querySelectorAll(`input[name="question${index}"]`);
+
+            answerElements.forEach(answerElement => {
+                let parentLi = answerElement.parentElement;
+                if (answerElement.value === q.correct) {
+                    parentLi.classList.add('correct');
+                } else if (selectedAnswer && answerElement.value === selectedAnswer.value) {
+                    parentLi.classList.add('incorrect');
+                }
+            });
+
+            if (selectedAnswer && selectedAnswer.value === q.correct) {
+                score++;
+            }
+        });
+
+        document.getElementById('result').innerText = `Du fikk ${score} av ${quizData.length} riktig!`;
+    }
+
+    loadQuiz();
+</script>
+
+</body>
+</html>

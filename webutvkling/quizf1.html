@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webutvikling - Forelesning 1 Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2>Webutvikling - Forelesning 1 Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Sjekk svar</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    // Spørsmål og svar
+    const quizData = [
+        {
+            question: "Hva gjør Git?",
+            answers: [
+                "Lagrer arbeid på en lokal harddisk",
+                "Lagrer arbeid på skyen og lar deg samarbeide gjennom versjonskontroll",
+                "Bare en editor for koding",
+                "En backup-løsning som automatisk lagrer filer"
+            ],
+            correct: "Lagrer arbeid på skyen og lar deg samarbeide gjennom versjonskontroll"
+        },
+        {
+            question: "Hva er forskjellen mellom Git og GitHub?",
+            answers: [
+                "Git er et GUI, mens GitHub er et tekstredigeringsprogram",
+                "Git er systemet, mens GitHub er grensesnittet som lar oss bruke systemet",
+                "GitHub er en IDE, mens Git er en versjonskontroll",
+                "Det er ingen forskjell"
+            ],
+            correct: "Git er systemet, mens GitHub er grensesnittet som lar oss bruke systemet"
+        },
+        {
+            question: "Hva er et repository?",
+            answers: [
+                "En fysisk mappe på datamaskinen din",
+                "En mappe i skyen som kan klones og brukes som prosjektmappe",
+                "Et program som lagrer kode",
+                "En form for nettside"
+            ],
+            correct: "En mappe i skyen som kan klones og brukes som prosjektmappe"
+        },
+        {
+            question: "Hva betyr det å klone et repository?",
+            answers: [
+                "Å lage en kopi av et prosjekt på en annen server",
+                "Å lage en kopi av et prosjekt fra GitHub til din lokale maskin",
+                "Å slette et prosjekt fra skyen",
+                "Å kopiere en fil fra en mappe til en annen"
+            ],
+            correct: "Å lage en kopi av et prosjekt fra GitHub til din lokale maskin"
+        },
+        {
+            question: "Hva er et IDE?",
+            answers: [
+                "Et sted hvor du skriver, kjører, og tester koden din",
+                "En nettside for å dele kode",
+                "En form for repository",
+                "En funksjon i Git"
+            ],
+            correct: "Et sted hvor du skriver, kjører, og tester koden din"
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz');
+
+    function loadQuiz() {
+        quizData.forEach((q, index) => {
+            let questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `<p>${q.question}</p>`;
+
+            let answersElement = document.createElement('ul');
+            answersElement.classList.add('answers');
+            q.answers.forEach(answer => {
+                answersElement.innerHTML += `
+                    <li>
+                        <input type="radio" name="question${index}" value="${answer}"> ${answer}
+                    </li>
+                `;
+            });
+
+            questionElement.appendChild(answersElement);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        quizData.forEach((q, index) => {
+            let selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+            let answerElements = document.querySelectorAll(`input[name="question${index}"]`);
+
+            answerElements.forEach(answerElement => {
+                let parentLi = answerElement.parentElement;
+                if (answerElement.value === q.correct) {
+                    parentLi.classList.add('correct');
+                } else if (selectedAnswer && answerElement.value === selectedAnswer.value) {
+                    parentLi.classList.add('incorrect');
+                }
+            });
+
+            if (selectedAnswer && selectedAnswer.value === q.correct) {
+                score++;
+            }
+        });
+
+        document.getElementById('result').innerText = `Du fikk ${score} av ${quizData.length} riktig!`;
+    }
+
+    loadQuiz();
+</script>
+
+</body>
+</html>
+

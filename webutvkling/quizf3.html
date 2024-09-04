@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webutvikling - Forelesning 3 Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2>Webutvikling - Forelesning 3 Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Sjekk svar</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    // Spørsmål og svar
+    const quizData = [
+        {
+            question: "Hva står HTML for?",
+            answers: [
+                "Hypertext Markup Language",
+                "Hyperlink Markup Language",
+                "Hightext Markup Language",
+                "Hypertext Modeling Language"
+            ],
+            correct: "Hypertext Markup Language"
+        },
+        {
+            question: "Hvilken HTML-tag brukes for å inkludere bilder?",
+            answers: [
+                "img",
+                "picture",
+                "image",
+                "src"
+            ],
+            correct: "img"
+        },
+        {
+            question: "Hva er en semantisk HTML-tag?",
+            answers: [
+                "En tagg som gir innholdet en betydning forståelig for mennesker og søkemotorer",
+                "En tagg som bare brukes for stil og design",
+                "En tagg som kun finnes i HTML5",
+                "En tagg som ikke krever en avslutningstag"
+            ],
+            correct: "En tagg som gir innholdet en betydning forståelig for mennesker og søkemotorer"
+        },
+        {
+            question: "Hva er HTML5 kjent for?",
+            answers: [
+                "Å innføre nye funksjoner som video- og lydtagger",
+                "Å erstatte CSS og JavaScript",
+                "Å fjerne støtte for eldre tagger",
+                "Å være et alternativ til XML"
+            ],
+            correct: "Å innføre nye funksjoner som video- og lydtagger"
+        },
+        {
+            question: "Hva gjør en attributt i en HTML-tag?",
+            answers: [
+                "Definerer type innhold på nettsiden",
+                "Gir tilleggsinformasjon til nettleseren om hvordan innholdet skal behandles",
+                "Er synlig på nettsiden",
+                "Er en del av taggens struktur"
+            ],
+            correct: "Gir tilleggsinformasjon til nettleseren om hvordan innholdet skal behandles"
+        },
+        {
+            question: "Hvilken tagg brukes til å definere metadata i en HTML-dokument?",
+            answers: [
+                "meta",
+                "metadata",
+                "info",
+                "head"
+            ],
+            correct: "meta"
+        },
+        {
+            question: "Hva gjør <head>-taggen i en HTML-dokument?",
+            answers: [
+                "Definerer synlig innhold på nettsiden",
+                "Inneholder metadata og link til eksterne ressurser",
+                "Viser bilder og videoer",
+                "Legger til stil og design"
+            ],
+            correct: "Inneholder metadata og link til eksterne ressurser"
+        },
+        {
+            question: "Hvordan definerer du en HTML5 doctype?",
+            answers: [
+                "DOCTYPE html",
+                "html5",
+                "doctype html",
+                "html"
+            ],
+            correct: "DOCTYPE html"
+        },
+        {
+            question: "Hva er en HTML-tag?",
+            answers: [
+                "En del av nettsidens synlige innhold",
+                "En del av nettleserens innstillinger",
+                "En kode som beskriver et innholdselement",
+                "En type databaseteknologi"
+            ],
+            correct: "En kode som beskriver et innholdselement"
+        },
+        {
+            question: "Hvilken tagg brukes til å definere hovedinnholdet på en nettside?",
+            answers: [
+                "main",
+                "content",
+                "body",
+                "section"
+            ],
+            correct: "main"
+        },
+        {
+            question: "Hva er et element i HTML?",
+            answers: [
+                "En fullstendig del av HTML-dokumentet, inkludert tagger og innhold",
+                "Bare en åpningstag",
+                "Bare en lukkingstag",
+                "En del av metadata"
+            ],
+            correct: "En fullstendig del av HTML-dokumentet, inkludert tagger og innhold"
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz');
+
+    function loadQuiz() {
+        quizData.forEach((q, index) => {
+            let questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `<p>${q.question}</p>`;
+
+            let answersElement = document.createElement('ul');
+            answersElement.classList.add('answers');
+            q.answers.forEach((answer, i) => {
+                answersElement.innerHTML += `
+                    <li>
+                        <input type="radio" name="question${index}" value="${answer}" id="q${index}_${i}">
+                        <label for="q${index}_${i}">${answer}</label>
+                    </li>
+                `;
+            });
+
+            questionElement.appendChild(answersElement);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        quizData.forEach((q, index) => {
+            let selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+            if (selectedAnswer) {
+                let selectedValue = selectedAnswer.value;
+                let isCorrect = selectedValue === q.correct;
+                if (isCorrect) {
+                    score++;
+                }
+
+                // Fargelegg riktig og feil svar
+                let answerElements = document.querySelectorAll(`input[name="question${index}"]`);
+                answerElements.forEach(answerElement => {
+                    let parentLi = answerElement.parentElement;
+                    if (answerElement.value === q.correct) {
+                        parentLi.classList.add('correct');
+                    } else if (answerElement.value === selectedValue) {
+                        parentLi.classList.add('incorrect');
+                    }
+                });
+            }
+        });
+        document.getElementById('result').innerText = `Du fikk ${score} av ${quizData.length} riktig!`;
+    }
+
+    loadQuiz();
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webutvikling - Forelesning 4 Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2>Webutvikling - Forelesning 4 Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Sjekk svar</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    // Spørsmål og svar
+    const quizData = [
+        {
+            question: "Hva er formålet med header-tagen i HTML?",
+            answers: [
+                "Å definere toppinnhold som overskrifter og navigasjonslinjer",
+                "Å gruppere relatert innhold som artikler",
+                "Å definere bunninnhold på nettsiden",
+                "Å representere selvstendig innhold som nyhetskort"
+            ],
+            correct: "Å definere toppinnhold som overskrifter og navigasjonslinjer"
+        },
+        {
+            question: "Hvordan brukes nav-tagen?",
+            answers: [
+                "Til å representere hovedinnholdet på siden",
+                "Til å definere navigasjonsmenyer og søkefelt",
+                "Til å vise relatert innhold",
+                "Til å gruppere flere seksjoner"
+            ],
+            correct: "Til å definere navigasjonsmenyer og søkefelt"
+        },
+        {
+            question: "Hva er hovedformålet med main-tagen?",
+            answers: [
+                "Å vise informasjon som ikke er relevant for hovedinnholdet",
+                "Å gruppere relaterte artikler",
+                "Å definere hovedinnholdet på siden og brukes kun én gang",
+                "Å definere metadata for dokumentet"
+            ],
+            correct: "Å definere hovedinnholdet på siden og brukes kun én gang"
+        },
+        {
+            question: "Hvilken tagg brukes til å gruppere flere elementer med samme tema?",
+            answers: [
+                "article",
+                "section",
+                "aside",
+                "footer"
+            ],
+            correct: "section"
+        },
+        {
+            question: "Hva brukes article-tagen til?",
+            answers: [
+                "Til å representere selvstendig innhold som nyhetsartikler",
+                "Til å definere toppinnhold på siden",
+                "Til å gruppere elementer i en seksjon",
+                "Til å vise metadata om dokumentet"
+            ],
+            correct: "Til å representere selvstendig innhold som nyhetsartikler"
+        },
+        {
+            question: "Hvordan skal aside-tagen brukes?",
+            answers: [
+                "Til å vise relatert innhold som ikke er hovedinnholdet",
+                "Til å definere toppinnhold på siden",
+                "Til å gruppere relaterte artikler",
+                "Til å vise metadata for dokumentet"
+            ],
+            correct: "Til å vise relatert innhold som ikke er hovedinnholdet"
+        },
+        {
+            question: "Hva er formålet med footer-tagen?",
+            answers: [
+                "Å definere metadata for dokumentet",
+                "Å gruppere relaterte artikler",
+                "Å holde bunninnhold som kontaktinformasjon og relaterte lenker",
+                "Å vise overskrifter og navigasjonslinjer"
+            ],
+            correct: "Å holde bunninnhold som kontaktinformasjon og relaterte lenker"
+        },
+        {
+            question: "Hvordan bør du bruke H1-H6 taggene?",
+            answers: [
+                "Til å definere overskrifter med ulik nivå",
+                "Til å gruppere seksjoner med samme tema",
+                "Til å vise metadata om dokumentet",
+                "Til å representere selvstendig innhold"
+            ],
+            correct: "Til å definere overskrifter med ulik nivå"
+        },
+        {
+            question: "Hva er en figure-tagg brukt til?",
+            answers: [
+                "Å representere et mediebilde eller illustrasjon med tilknyttede bildetekster",
+                "Å definere toppinnhold på en side",
+                "Å gruppere flere seksjoner av relatert innhold",
+                "Å vise navigasjonsmenyer"
+            ],
+            correct: "Å representere et mediebilde eller illustrasjon med tilknyttede bildetekster"
+        },
+        {
+            question: "Hva er en figcaption-tagg brukt til?",
+            answers: [
+                "Å definere metadata for dokumentet",
+                "Til å gi en bildetekst til et figure-element",
+                "Til å gruppere relaterte artikler",
+                "Til å definere hovedinnhold på siden"
+            ],
+            correct: "Til å gi en bildetekst til et figure-element"
+        },
+        {
+            question: "Hva er viktig med semantiske HTML-tagger?",
+            answers: [
+                "De gir kun estetisk forbedring",
+                "De forbedrer tilgjengelighet (UU) og søkemotoroptimalisering (SEO)",
+                "De er kun nødvendige for HTML5",
+                "De erstatter alle andre HTML-tagger"
+            ],
+            correct: "De forbedrer tilgjengelighet (UU) og søkemotoroptimalisering (SEO)"
+        }
+    ];
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function loadQuiz() {
+        const quizContainer = document.getElementById('quiz');
+        quizData.forEach((q, index) => {
+            let questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `<p>${q.question}</p>`;
+
+            let answersElement = document.createElement('ul');
+            answersElement.classList.add('answers');
+            
+            // Shuffle answers
+            let answers = [...q.answers];
+            shuffleArray(answers);
+
+            answers.forEach((answer, i) => {
+                answersElement.innerHTML += `
+                    <li>
+                        <input type="radio" name="question${index}" value="${answer}" id="q${index}_${i}">
+                        <label for="q${index}_${i}">${answer}</label>
+                    </li>
+                `;
+            });
+
+            questionElement.appendChild(answersElement);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        quizData.forEach((q, index) => {
+            let selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+            if (selectedAnswer) {
+                let selectedValue = selectedAnswer.value;
+                let isCorrect = selectedValue === q.correct;
+                if (isCorrect) {
+                    score++;
+                }
+
+                // Fargelegg riktig og feil svar
+                let answerElements = document.querySelectorAll(`input[name="question${index}"]`);
+                answerElements.forEach(answerElement => {
+                    let parentLi = answerElement.parentElement;
+                    if (answerElement.value === q.correct) {
+                        parentLi.classList.add('correct');
+                    } else if (answerElement.value === selectedValue) {
+                        parentLi.classList.add('incorrect');
+                    }
+                });
+            }
+        });
+        document.getElementById('result').innerText = `Du fikk ${score} av ${quizData.length} riktig!`;
+    }
+
+    loadQuiz();
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webutvikling - Forelesning 6 Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2>Webutvikling - Forelesning 6 Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Sjekk svar</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    // Spørsmål og svar
+    const quizData = [
+        {
+            question: "Hva er formålet med form-tagen?",
+            answers: [
+                "Å opprette et skjema for å samle inn brukerdata",
+                "Å definere stilen på en nettside",
+                "Å gruppere flere input-felt",
+                "Å vise metadata om dokumentet"
+            ],
+            correct: "Å opprette et skjema for å samle inn brukerdata"
+        },
+        {
+            question: "Hvilket attributt spesifiserer hvordan data sendes til serveren i et form-element?",
+            answers: [
+                "method",
+                "action",
+                "value",
+                "type"
+            ],
+            correct: "method"
+        },
+        {
+            question: "Hvordan kan du bruke input-tagen for å samle inn tekst fra brukeren?",
+            answers: [
+                "Ved å bruke type='text'",
+                "Ved å bruke type='file'",
+                "Ved å bruke type='password'",
+                "Ved å bruke type='checkbox'"
+            ],
+            correct: "Ved å bruke type='text'"
+        },
+        {
+            question: "Hva gjør 'placeholder'-attributtet i et input-felt?",
+            answers: [
+                "Viser en hjelpetekst i input-feltet før brukeren skriver noe",
+                "Bestemmer hvilken type data som skal samles inn",
+                "Definerer standardverdien for input-feltet",
+                "Angir hvor input-feltet skal plasseres på siden"
+            ],
+            correct: "Viser en hjelpetekst i input-feltet før brukeren skriver noe"
+        },
+        {
+            question: "Hva brukes 'label'-taggen til i HTML-skjemaer?",
+            answers: [
+                "Til å gi en beskrivelse til et input-felt",
+                "Til å definere standardverdien for et input-felt",
+                "Til å gruppere flere input-felt",
+                "Til å spesifisere URL-en for skjemaet"
+            ],
+            correct: "Til å gi en beskrivelse til et input-felt"
+        },
+        {
+            question: "Hvilken type input-felt brukes til å samle inn flere linjer med tekst?",
+            answers: [
+                "Textarea",
+                "Input type='text'",
+                "Input type='password'",
+                "Input type='checkbox'"
+            ],
+            correct: "Textarea"
+        },
+        {
+            question: "Hva spesifiserer 'name'-attributtet i et input-felt?",
+            answers: [
+                "Navnet som brukes til å identifisere feltet når data sendes til serveren",
+                "Type av data som kan legges inn i feltet",
+                "Standardverdien for feltet",
+                "Hvordan feltet skal styles"
+            ],
+            correct: "Navnet som brukes til å identifisere feltet når data sendes til serveren"
+        },
+        {
+            question: "Hvordan kan du begrense hvilken type data som kan legges inn i et input-felt?",
+            answers: [
+                "Ved å bruke type-attributtet",
+                "Ved å bruke placeholder-attributtet",
+                "Ved å bruke label-tagen",
+                "Ved å bruke textarea-tagen"
+            ],
+            correct: "Ved å bruke type-attributtet"
+        },
+        {
+            question: "Hva er en god praksis for validering av HTML-skjemaer?",
+            answers: [
+                "Å bruke attributter som type og maxlength for å begrense og validere brukerinput",
+                "Å bruke generiske input-felt uten spesifikasjoner",
+                "Å ikke spesifisere noen begrensninger",
+                "Å alltid bruke form-tagen"
+            ],
+            correct: "Å bruke attributter som type og maxlength for å begrense og validere brukerinput"
+        },
+        {
+            question: "Hvordan definerer du standardverdien for et input-felt?",
+            answers: [
+                "Ved å bruke value-attributtet",
+                "Ved å bruke placeholder-attributtet",
+                "Ved å bruke name-attributtet",
+                "Ved å bruke type-attributtet"
+            ],
+            correct: "Ved å bruke value-attributtet"
+        },
+        {
+            question: "Hvordan kan du sikre at et skjema sender data til en spesifikk URL?",
+            answers: [
+                "Ved å bruke action-attributtet i form-tagen",
+                "Ved å bruke name-attributtet i input-tagen",
+                "Ved å bruke type-attributtet i input-tagen",
+                "Ved å bruke placeholder-attributtet i input-tagen"
+            ],
+            correct: "Ved å bruke action-attributtet i form-tagen"
+        }
+    ];
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function loadQuiz() {
+        const quizContainer = document.getElementById('quiz');
+        quizData.forEach((q, index) => {
+            let questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `<p>${q.question}</p>`;
+
+            let answersElement = document.createElement('ul');
+            answersElement.classList.add('answers');
+            
+            // Shuffle answers
+            let answers = [...q.answers];
+            shuffleArray(answers);
+
+            answers.forEach((answer, i) => {
+                answersElement.innerHTML += `
+                    <li>
+                        <input type="radio" name="question${index}" value="${answer}" id="q${index}_${i}">
+                        <label for="q${index}_${i}">${answer}</label>
+                    </li>
+                `;
+            });
+
+            questionElement.appendChild(answersElement);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        quizData.forEach((q, index) => {
+            let selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+            if (selectedAnswer) {
+                let selectedValue = selectedAnswer.value;
+                let isCorrect = selectedValue === q.correct;
+                if (isCorrect) {
+                    score++;
+                }
+
+                // Fargelegg riktig og feil svar
+                let answerElements = document.querySelectorAll(`input[name="question${index}"]`);
+                answerElements.forEach(answerElement => {
+                    let parentLi = answerElement.parentElement;
+                    if (answerElement.value === q.correct) {
+                        parentLi.classList.add('correct');
+                    } else if (answerElement.value === selectedValue) {
+                        parentLi.classList.add('incorrect');
+                    }
+                });
+            }
+        });
+        document.getElementById('result').innerText = `Du fikk ${score} av ${quizData.length} riktig!`;
+    }
+
+    loadQuiz();
+</script>
+
+</body>
+</html>
+

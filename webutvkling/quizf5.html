@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webutvikling - Forelesning 5 Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2>Webutvikling - Forelesning 5 Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Sjekk svar</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    // Spørsmål og svar
+    const quizData = [
+        {
+            question: "Hva brukes anker-tagen (&lt;a&gt;) til?",
+            answers: [
+                "Til å lage hyperkoblinger mellom sider",
+                "Til å definere hovedinnholdet på en side",
+                "Til å gruppere relaterte artikler",
+                "Til å vise metadata om dokumentet"
+            ],
+            correct: "Til å lage hyperkoblinger mellom sider"
+        },
+        {
+            question: "Hva gjør href-attributtet i en anker-tag?",
+            answers: [
+                "Definerer URL-en som lenken peker til",
+                "Bestemmer hvordan lenken skal åpnes i ny fane",
+                "Gir ekstra informasjon til skjermlesere",
+                "Endrer fargen på lenken"
+            ],
+            correct: "Definerer URL-en som lenken peker til"
+        },
+        {
+            question: "Hva brukes target-attributtet i en anker-tag til?",
+            answers: [
+                "Til å bestemme om lenken åpnes i samme eller ny fane",
+                "Til å definere URL-en lenken peker til",
+                "Til å legge til ekstra metadata til lenken",
+                "Til å gi en lenke en spesiell farge"
+            ],
+            correct: "Til å bestemme om lenken åpnes i samme eller ny fane"
+        },
+        {
+            question: "Hva er formålet med rel=nofollow?",
+            answers: [
+                "Å indikere at søkemotorer ikke skal følge lenken",
+                "Å spesifisere lenkens URL",
+                "Å endre lenkens farge",
+                "Å vise en bildetekst for lenken"
+            ],
+            correct: "Å indikere at søkemotorer ikke skal følge lenken"
+        },
+        {
+            question: "Hvordan kan aria-labels forbedre tilgjengeligheten på lenker?",
+            answers: [
+                "Ved å gi ekstra informasjon til skjermlesere",
+                "Ved å endre lenkens farge",
+                "Ved å spesifisere URL-en",
+                "Ved å bestemme hvordan lenken åpnes"
+            ],
+            correct: "Ved å gi ekstra informasjon til skjermlesere"
+        },
+        {
+            question: "Hva gjør :focus pseudo-klassen i CSS?",
+            answers: [
+                "Stiler elementet når det er i fokus",
+                "Bestemmer URL-en til lenken",
+                "Endrer størrelsen på lenken",
+                "Lager en ny lenke"
+            ],
+            correct: "Stiler elementet når det er i fokus"
+        },
+        {
+            question: "Hvorfor er meningsfulle ankertekster viktige for SEO?",
+            answers: [
+                "De gir bedre beskrivelse av lenken og forbedrer rangeringen",
+                "De endrer fargen på lenken",
+                "De gjør lenken usynlig for søkemotorer",
+                "De lager en ny lenke"
+            ],
+            correct: "De gir bedre beskrivelse av lenken og forbedrer rangeringen"
+        },
+        {
+            question: "Hva bør unngås for å opprettholde god tilgjengelighet med lenker?",
+            answers: [
+                "Generisk tekst som 'klikk her' eller 'les mer'",
+                "Spesifikke URL-er",
+                "Meningsfulle ankertekster",
+                "Eksterne lenker"
+            ],
+            correct: "Generisk tekst som 'klikk her' eller 'les mer'"
+        },
+        {
+            question: "Hvordan kan du sikre at lenker er synlige for alle brukere?",
+            answers: [
+                "Bruke :focus i CSS og unngå å gjemme lenker",
+                "Endre lenkens farge",
+                "Bruke generisk tekst",
+                "Unngå bruk av aria-labels"
+            ],
+            correct: "Bruke :focus i CSS og unngå å gjemme lenker"
+        },
+        {
+            question: "Hva er en god praksis for interne lenker på et nettsted?",
+            answers: [
+                "Å ha klare og beskrivende lenketekster for bedre navigering",
+                "Å bruke generiske lenketekster",
+                "Å ha mange eksterne lenker",
+                "Å ikke bruke lenker"
+            ],
+            correct: "Å ha klare og beskrivende lenketekster for bedre navigering"
+        },
+        {
+            question: "Hvordan kan du unngå døde lenker på nettstedet ditt?",
+            answers: [
+                "Ved å regelmessig oppdatere og teste alle lenker",
+                "Ved å bruke generiske lenketekster",
+                "Ved å endre lenkefargen",
+                "Ved å bruke alle lenker i footer"
+            ],
+            correct: "Ved å regelmessig oppdatere og teste alle lenker"
+        }
+    ];
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function loadQuiz() {
+        const quizContainer = document.getElementById('quiz');
+        quizData.forEach((q, index) => {
+            let questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `<p>${q.question}</p>`;
+
+            let answersElement = document.createElement('ul');
+            answersElement.classList.add('answers');
+            
+            // Shuffle answers
+            let answers = [...q.answers];
+            shuffleArray(answers);
+
+            answers.forEach((answer, i) => {
+                answersElement.innerHTML += `
+                    <li>
+                        <input type="radio" name="question${index}" value="${answer}" id="q${index}_${i}">
+                        <label for="q${index}_${i}">${answer}</label>
+                    </li>
+                `;
+            });
+
+            questionElement.appendChild(answersElement);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        quizData.forEach((q, index) => {
+            let selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+            if (selectedAnswer) {
+                let selectedValue = selectedAnswer.value;
+                let isCorrect = selectedValue === q.correct;
+                if (isCorrect) {
+                    score++;
+                }
+
+                // Fargelegg riktig og feil svar
+                let answerElements = document.querySelectorAll(`input[name="question${index}"]`);
+                answerElements.forEach(answerElement => {
+                    let parentLi = answerElement.parentElement;
+                    if (answerElement.value === q.correct) {
+                        parentLi.classList.add('correct');
+                    } else if (answerElement.value === selectedValue) {
+                        parentLi.classList.add('incorrect');
+                    }
+                });
+            }
+        });
+        document.getElementById('result').innerText = `Du fikk ${score} av ${quizData.length} riktig!`;
+    }
+
+    loadQuiz();
+</script>
+
+</body>
+</html>
