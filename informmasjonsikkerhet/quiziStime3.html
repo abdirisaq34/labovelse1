@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informasjonssikkerhet 1 - Forelesning Quiz</title>
+    <title>Informasjonssikkerhet 4 - Quiz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,7 +55,7 @@
 <body>
 
 <div class="quiz-container">
-    <h1>Informasjonssikkerhet 1 - Forelesning Quiz</h1>
+    <h1>Informasjonssikkerhet 4 - Quiz</h1>
     
     <div id="quiz"></div>
     
@@ -66,114 +66,114 @@
 <script>
     const quizData = [
         {
-            question: "Hva er det enkleste tiltaket innen informasjonssikkerhet?",
+            question: "Hva er formålet med ISO 27001?",
             answers: [
-                "Å hindre tilgang",
-                "Å bruke sterke passord",
-                "Å installere antivirusprogrammer",
-                "Å ha sikkerhetskopier"
+                "Styringsrammeverk for informasjonssikkerhet",
+                "Tiltaksrammeverk for informasjonssikkerhet",
+                "Gratis sikkerhetskontroller",
+                "Enkeltstående sikkerhetsverktøy"
             ],
-            correct: "Å hindre tilgang"
+            correct: "Styringsrammeverk for informasjonssikkerhet"
         },
         {
-            question: "Hva er informasjonssikkerhet?",
+            question: "Hva beskriver NSM Grunnprinsipper for IKT-sikkerhet?",
             answers: [
-                "Kun digital sikkerhet",
-                "Kun fysisk sikkerhet",
-                "Både digital og fysisk sikkerhet",
-                "Ingen av delene"
+                "En forenklet versjon av ISO 27002",
+                "En detaljert tiltaksrammeverk",
+                "En omfattende styringsrammeverk",
+                "En spesifikk lovgivning"
             ],
-            correct: "Både digital og fysisk sikkerhet"
+            correct: "En forenklet versjon av ISO 27002"
         },
         {
-            question: "Hvorfor er sannsynlighet vanskelig å regne på?",
+            question: "Hva er en fordel med å følge standarder som ISO 27000-serien?",
             answers: [
-                "For mye informasjon",
-                "For lite informasjon",
-                "Det er enkelt å håndtere",
-                "Ingen av de ovennevnte"
+                "Skaper felles forståelse og språk",
+                "Koster ingenting",
+                "Er alltid tilpasset alle bedrifter",
+                "Er kun relevante for store bedrifter"
             ],
-            correct: "For mye informasjon"
+            correct: "Skaper felles forståelse og språk"
         },
         {
-            question: "Hva er risiko i informasjonssikkerhet?",
+            question: "Hva er en ulempe med standarder innen informasjonssikkerhet?",
             answers: [
-                "Kun konsekvensen",
-                "Kun sannsynligheten",
-                "Sammenhengen mellom konsekvens og sannsynlighet",
-                "Ingen av delene"
+                "Kan være dyre og omfattende",
+                "Gir alltid en 100% sikkerhet",
+                "Er enkle å implementere uten tilpasning",
+                "Tilbyr gratis ressurser og støtte"
             ],
-            correct: "Sammenhengen mellom konsekvens og sannsynlighet"
+            correct: "Kan være dyre og omfattende"
         },
         {
-            question: "Hvordan bør tiltak i informasjonssikkerhet planlegges?",
+            question: "Hva er hovedfokuset til CIS Controls?",
             answers: [
-                "Etter hendelsen skjer",
-                "Før hendelsen skjer",
-                "Når som helst",
-                "Ingen spesifikke krav"
+                "Gratis, oppdaterte sikkerhetskontroller",
+                "Omfattende styringsrammeverk",
+                "Kostbare sikkerhetssertifiseringer",
+                "Lokal sikkerhetslovgivning"
             ],
-            correct: "Før hendelsen skjer"
+            correct: "Gratis, oppdaterte sikkerhetskontroller"
         },
         {
-            question: "Hva påvirker vurderingen av sannsynlighet i informasjonssikkerhet?",
+            question: "Hva innebærer ‘Top-Down’ tilnærming i implementering av informasjonssikkerhet?",
             answers: [
-                "Ønsketenking",
-                "Objektiv vurdering",
-                "Korrekt informasjon",
-                "Ingen påvirkninger"
+                "Ledelsen gjør sikkerhetsarbeidet og sender det nedover",
+                "Alle ansatte implementerer tiltak på egen hånd",
+                "Sikkerhetsarbeid skjer uavhengig av ledelsen",
+                "Sikkerhetsarbeid initieres fra bunnen av"
             ],
-            correct: "Ønsketenking"
+            correct: "Ledelsen gjør sikkerhetsarbeidet og sender det nedover"
         },
         {
-            question: "Hva bør vurderes når du planlegger sikkerhetstiltak?",
+            question: "Hva er en grunnleggende prinsipp for informasjonssikkerhet ifølge McCumber Cube?",
             answers: [
-                "Kun kostnad",
-                "Kun teknologi",
-                "Totalen og konsekvensen",
-                "Ingen spesifikke faktorer"
+                "Beskyttelse av konfidensialitet, integritet og tilgjengelighet",
+                "Fullstendig sikkerhet er mulig",
+                "Sikkerhetsstandarder kan ignoreres",
+                "Sikkerhet må være reaktiv, ikke proaktiv"
             ],
-            correct: "Totalen og konsekvensen"
+            correct: "Beskyttelse av konfidensialitet, integritet og tilgjengelighet"
         },
         {
-            question: "Hva kan informasjonssikkerhet omfatte?",
+            question: "Hva er et kjennetegn ved NIST rammeverket?",
             answers: [
-                "Kun datasikkerhet",
-                "Kun fysisk sikkerhet",
-                "Både datasikkerhet og fysisk sikkerhet",
-                "Ingen av delene"
+                "Anerkjent rammeverk brukt sammen med andre standarder",
+                "Gratis og enkelt å implementere",
+                "Spesifikt for små bedrifter",
+                "Krever omfattende interne rapporter"
             ],
-            correct: "Både datasikkerhet og fysisk sikkerhet"
+            correct: "Anerkjent rammeverk brukt sammen med andre standarder"
         },
         {
-            question: "Hva er en utfordring ved å håndtere sannsynlighet i informasjonssikkerhet?",
+            question: "Hvilken standard er kjent for å være omfattende og kostbar?",
             answers: [
-                "Vanskeligheter med objektiv vurdering",
-                "Enkel vurdering",
-                "Håndtering av små mengder informasjon",
-                "Ingen utfordringer"
+                "ISO 27000-serien",
+                "CIS Controls",
+                "NIST",
+                "NSM Grunnprinsipper"
             ],
-            correct: "Vanskeligheter med objektiv vurdering"
+            correct: "ISO 27000-serien"
         },
         {
-            question: "Hvem har ansvaret for informasjonssikkerhet i en organisasjon?",
+            question: "Hva er en utfordring med implementering av sikkerhetsstandarder?",
             answers: [
-                "Kun IT-avdelingen",
-                "Kun sikkerhetsansvarlig",
-                "Bedriftsledere og sikkerhetsansvarlig",
-                "Ingen spesifikke personer"
+                "Sikkerhet er alltid 100% sikret",
+                "Standardene er universelt passende for alle bedrifter",
+                "Standardene kan være kostbare og tidkrevende",
+                "Sikkerhetsstandarder gir umiddelbare resultater"
             ],
-            correct: "Bedriftsledere og sikkerhetsansvarlig"
+            correct: "Standardene kan være kostbare og tidkrevende"
         },
         {
-            question: "Hva må man gjøre for å sikre informasjonssikkerhet?",
+            question: "Hvilket rammeverk gir konkrete tiltak for å oppnå informasjonssikkerhet?",
             answers: [
-                "Bare installere programvare",
-                "Bare fysisk sikkerhet",
-                "Implementere både fysiske og digitale tiltak",
-                "Ingen spesifikke tiltak"
+                "Tiltaksrammeverk",
+                "Styringsrammeverk",
+                "Gratis sikkerhetsverktøy",
+                "Lokal lovgivning"
             ],
-            correct: "Implementere både fysiske og digitale tiltak"
+            correct: "Tiltaksrammeverk"
         }
     ];
 
@@ -185,16 +185,18 @@
     }
 
     function loadQuiz() {
+        const quizContainer = document.getElementById('quiz');
         quizData.forEach((item, index) => {
             const questionElement = document.createElement('div');
             questionElement.classList.add('question');
             questionElement.innerHTML = `<p>${index + 1}. ${item.question}</p>`;
             
             const answerList = document.createElement('ul');
-            const shuffledAnswers = [...item.answers];
-            shuffleArray(shuffledAnswers);
             
-            shuffledAnswers.forEach(answer => {
+            const answers = [...item.answers];
+            shuffleArray(answers);
+            
+            answers.forEach(answer => {
                 const answerItem = document.createElement('li');
                 answerItem.classList.add('answer');
                 answerItem.innerHTML = `<input type="radio" name="question${index}" value="${answer}"> ${answer}`;
@@ -202,7 +204,7 @@
             });
             
             questionElement.appendChild(answerList);
-            document.getElementById('quiz').appendChild(questionElement);
+            quizContainer.appendChild(questionElement);
         });
     }
 
@@ -212,7 +214,7 @@
         
         quizData.forEach((item, index) => {
             const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
-            const questionElement = document.getElementById('quiz').children[index];
+            const questionElement = document.querySelector(`.question:nth-child(${index + 1})`);
             
             if (selectedAnswer) {
                 if (selectedAnswer.value === item.correct) {
@@ -250,5 +252,4 @@
 
 </body>
 </html>
-
 
