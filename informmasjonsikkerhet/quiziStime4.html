@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasjonssikkerhet Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #results-container {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Informasjonssikkerhet Quiz</h1>
+        <form id="quiz-form">
+            <div id="questions-container"></div>
+            <button type="submit">Send inn svar</button>
+        </form>
+        <div id="results-container"></div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "Hva er CIS Controls?",
+                answers: [
+                    { text: "Et gratis sett med sikkerhetspraksiser", correct: true },
+                    { text: "En ISO-standard", correct: false },
+                    { text: "Et lovpålagt system", correct: false },
+                    { text: "En fysisk sikkerhetskontroll", correct: false }
+                ]
+            },
+            {
+                question: "Hvor mange kontrollpunkter består CIS Controls av?",
+                answers: [
+                    { text: "18", correct: true },
+                    { text: "12", correct: false },
+                    { text: "21", correct: false },
+                    { text: "25", correct: false }
+                ]
+            },
+            {
+                question: "Hva er ISO 27001?",
+                answers: [
+                    { text: "Et styringsrammeverk for informasjonssikkerhet", correct: true },
+                    { text: "Et tiltaksrammeverk", correct: false },
+                    { text: "En teknologisk løsning for cybersikkerhet", correct: false },
+                    { text: "Et program for datalagring", correct: false }
+                ]
+            },
+            {
+                question: "Hva er ISO 27002?",
+                answers: [
+                    { text: "Et tiltaksrammeverk med 114 sikkerhetskontroller", correct: true },
+                    { text: "En standard for økonomisk sikkerhet", correct: false },
+                    { text: "En ISO standard for fysisk sikkerhet", correct: false },
+                    { text: "En NIST standard", correct: false }
+                ]
+            },
+            {
+                question: "Hva handler ISO 27032 om?",
+                answers: [
+                    { text: "Implementering av informasjonssikkerhet og internkontroll", correct: true },
+                    { text: "En metode for datasikkerhetskopiering", correct: false },
+                    { text: "Sikkerhet for IoT-enheter", correct: false },
+                    { text: "Risikoanalyse", correct: false }
+                ]
+            },
+            {
+                question: "Hva dekker NIST-standarden 800-serien?",
+                answers: [
+                    { text: "IT og cybersikkerhetsrammeverk", correct: true },
+                    { text: "Personvern og datasikkerhet", correct: false },
+                    { text: "Fysiske sikkerhetstiltak", correct: false },
+                    { text: "Backup-protokoller", correct: false }
+                ]
+            },
+            {
+                question: "Hva er en fordel med et styringssystem for informasjonssikkerhet?",
+                answers: [
+                    { text: "Konkurransefortrinn i anbud", correct: true },
+                    { text: "Det er gratis å implementere", correct: false },
+                    { text: "Det er kun ment for store bedrifter", correct: false },
+                    { text: "Ingen juridiske forpliktelser", correct: false }
+                ]
+            },
+            {
+                question: "Hva er risikohåndteringssyklusen?",
+                answers: [
+                    { text: "Plan, Do, Check, Act", correct: true },
+                    { text: "Assess, Control, Implement, Review", correct: false },
+                    { text: "Protect, Detect, Respond, Recover", correct: false },
+                    { text: "Identify, Implement, Analyze, Act", correct: false }
+                ]
+            },
+            {
+                question: "Hva er et av hovedmålene med NIST-rammeverket?",
+                answers: [
+                    { text: "Finne, organisere og håndtere trusler", correct: true },
+                    { text: "Kjøre obligatorisk risikohåndtering", correct: false },
+                    { text: "Opprette fysiske sikkerhetsbarrierer", correct: false },
+                    { text: "Overvåke økonomiske transaksjoner", correct: false }
+                ]
+            },
+            {
+                question: "Hva dekker ISO 27033?",
+                answers: [
+                    { text: "Nettverkssikkerhet og Big Data", correct: true },
+                    { text: "Backup-metoder", correct: false },
+                    { text: "Fysisk sikring av datasentre", correct: false },
+                    { text: "Datamaskinens ytelse", correct: false }
+                ]
+            },
+            {
+                question: "Hva er NSMs viktigste råd om risikoanalyse?",
+                answers: [
+                    { text: "Risikoanalyse bør være kontinuerlig", correct: true },
+                    { text: "Risikoanalyse er en engangsprosess", correct: false },
+                    { text: "Ingen tiltak er nødvendig etter risikoanalyse", correct: false },
+                    { text: "Det bør kun gjøres ved hendelser", correct: false }
+                ]
+            }
+        ];
+
+        // Funksjon for å stokke svarene
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Generer spørsmålene og stokker svarene
+        function loadQuiz() {
+            const questionsContainer = document.getElementById('questions-container');
+            quizQuestions.forEach((questionObj, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+
+                const questionTitle = document.createElement('h2');
+                questionTitle.innerText = `${index + 1}. ${questionObj.question}`;
+                questionDiv.appendChild(questionTitle);
+
+                shuffleArray(questionObj.answers);
+
+                questionObj.answers.forEach((answer, answerIndex) => {
+                    const label = document.createElement('label');
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `question-${index}`;
+                    input.value = answer.correct;
+                    input.id = `question-${index}-answer-${answerIndex}`;
+
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(answer.text));
+                    questionDiv.appendChild(label);
+                    questionDiv.appendChild(document.createElement('br'));
+                });
+
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Funksjon for å sjekke svar og vise resultater med farge
+        document.getElementById('quiz-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let score = 0;
+
+            quizQuestions.forEach((questionObj, index) => {
+                const selectedAnswer = document.querySelector(`input[name="question-${index}"]:checked`);
+                const answers = document.querySelectorAll(`input[name="question-${index}"]`);
+
+                answers.forEach((answerElement, answerIndex) => {
+                    const label = answerElement.parentElement;
+                    if (answerElement.value === 'true') {
+                        label.classList.add('correct'); // Marker riktig svar
+                    }
+                    if (selectedAnswer === answerElement && answerElement.value === 'false') {
+                        label.classList.add('incorrect'); // Marker feil svar
+                    }
+                });
+
+                if (selectedAnswer && selectedAnswer.value === 'true') {
+                    score++;
+                }
+            });
+
+            const resultText = `Du fikk ${score} av ${quizQuestions.length} riktige!`;
+            document.getElementById('results-container').innerText = resultText;
+        });
+
+        // Kall funksjonen når siden lastes
+        loadQuiz();
+    </script>
+</body>
+</html>
