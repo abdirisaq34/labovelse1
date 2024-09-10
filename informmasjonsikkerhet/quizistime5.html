@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasjonssikkerhet Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .answer {
+            margin-bottom: 10px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: normal;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Informasjonssikkerhet Quiz</h1>
+    
+    <div id="quiz"></div>
+    
+    <button onclick="checkAnswers()">Sjekk svar</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            question: "Hva er det første steget i risikoanalysesyklusen?",
+            answers: [
+                "Kartlegging",
+                "Etablering",
+                "Verdivurdering",
+                "Dokumentering"
+            ],
+            correct: "Kartlegging"
+        },
+        {
+            question: "Hva er formålet med risikohåndtering?",
+            answers: [
+                "Å dokumentere alle prosesser",
+                "Å redusere eller fjerne risikoer",
+                "Å evaluere sikkerhetskulturen",
+                "Å kartlegge trusselbilde"
+            ],
+            correct: "Å redusere eller fjerne risikoer"
+        },
+        {
+            question: "Hvorfor er dokumentasjon viktig i en risikoanalyse?",
+            answers: [
+                "For å øke sikkerhetsbudsjettet",
+                "For å sikre at ingenting blir glemt",
+                "For å redusere antall ansatte",
+                "For å forbedre kommunikasjonen"
+            ],
+            correct: "For å sikre at ingenting blir glemt"
+        },
+        {
+            question: "Hva er en kaosaktør?",
+            answers: [
+                "En aktør med klare mål og intensjoner",
+                "En aktør som lager forstyrrelser uten spesifikke mål",
+                "En aktør med tilgang til sensitiv informasjon",
+                "En aktør som arbeider med andre organisasjoner"
+            ],
+            correct: "En aktør som lager forstyrrelser uten spesifikke mål"
+        },
+        {
+            question: "Når bør en risikoanalyse oppdateres?",
+            answers: [
+                "Når det er en ny ansatt",
+                "Når organisasjonen endres teknisk eller krav",
+                "Når alle har ferie",
+                "Når budsjettet endres"
+            ],
+            correct: "Når organisasjonen endres teknisk eller krav"
+        },
+        {
+            question: "Hva er formålet med styringssystemer i informasjonsikkerhet?",
+            answers: [
+                "Å redusere antall ansatte",
+                "Å øke sikkerhetsbudsjettet",
+                "Å sikre riktige tiltak og dokumentasjon",
+                "Å forbedre kommunikasjonen"
+            ],
+            correct: "Å sikre riktige tiltak og dokumentasjon"
+        },
+        {
+            question: "Hva bør vurderes når man velger hvem som skal styre styringssystemet?",
+            answers: [
+                "Om de har høyere utdanning",
+                "Om de kjenner systemene godt og kan gi nyttig info",
+                "Om de er eksterne konsulenter",
+                "Om de har lang erfaring i bransjen"
+            ],
+            correct: "Om de kjenner systemene godt og kan gi nyttig info"
+        },
+        {
+            question: "Hva er en viktig faktor ved vurdering av trusselaktører?",
+            answers: [
+                "Deres geografiske plassering",
+                "Deres intensjon om å gjøre skade",
+                "Deres økonomiske ressurser",
+                "Deres antall ansatte"
+            ],
+            correct: "Deres intensjon om å gjøre skade"
+        },
+        {
+            question: "Hva er viktig når man vurderer risikohåndtering?",
+            answers: [
+                "Å øke budsjettet",
+                "Å implementere risikoreduserende tiltak",
+                "Å minimere dokumentasjon",
+                "Å redusere antall ansatte"
+            ],
+            correct: "Å implementere risikoreduserende tiltak"
+        },
+        {
+            question: "Hvordan bidrar et styringssystem til å oppfylle lovkrav?",
+            answers: [
+                "Ved å redusere kostnader",
+                "Ved å dokumentere sikkerhetstiltak",
+                "Ved å øke antall ansatte",
+                "Ved å forbedre kommunikasjonen"
+            ],
+            correct: "Ved å dokumentere sikkerhetstiltak"
+        },
+        {
+            question: "Hva skal man gjøre dersom nye sårbarheter oppdages?",
+            answers: [
+                "Øke antall ansatte",
+                "Oppdatere risikoanalysen og tiltak",
+                "Øke budsjettet",
+                "Redusere dokumentasjonen"
+            ],
+            correct: "Oppdatere risikoanalysen og tiltak"
+        }
+    ];
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function loadQuiz() {
+        const quizContainer = document.getElementById('quiz');
+        quizData.forEach((item, index) => {
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+            questionElement.innerHTML = `<p>${index + 1}. ${item.question}</p>`;
+            
+            const answerList = document.createElement('ul');
+            const answers = [...item.answers];
+            shuffleArray(answers);
+            
+            answers.forEach(answer => {
+                const answerItem = document.createElement('li');
+                answerItem.classList.add('answer');
+                answerItem.innerHTML = `<input type="radio" name="question${index}" value="${answer}"> ${answer}`;
+                answerList.appendChild(answerItem);
+            });
+            
+            questionElement.appendChild(answerList);
+            quizContainer.appendChild(questionElement);
+        });
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        let feedback = '';
+        
+        quizData.forEach((item, index) => {
+            const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+            const questionElement = document.getElementById('quiz').children[index];
+            
+            if (selectedAnswer) {
+                if (selectedAnswer.value === item.correct) {
+                    score++;
+                    questionElement.querySelectorAll('input').forEach(input => {
+                        if (input.value === item.correct) {
+                            input.parentElement.classList.add('correct');
+                        }
+                    });
+                } else {
+                    questionElement.querySelectorAll('input').forEach(input => {
+                        if (input.value === item.correct) {
+                            input.parentElement.classList.add('correct');
+                        } else if (input === selectedAnswer) {
+                            input.parentElement.classList.add('incorrect');
+                        }
+                    });
+                }
+            } else {
+                questionElement.querySelectorAll('input').forEach(input => {
+                    if (input.value === item.correct) {
+                        input.parentElement.classList.add('correct');
+                    }
+                });
+            }
+            
+            feedback += `<div class="feedback">${item.question}<br>Riktig svar: ${item.correct}</div>`;
+        });
+        
+        document.getElementById('result').innerHTML = `<h2>Du fikk ${score} av ${quizData.length} riktige!</h2>${feedback}`;
+    }
+
+    loadQuiz();
+</script>
+
+</body>
+</html>
+
