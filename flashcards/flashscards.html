@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards med Hint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .flashcard-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+        .flashcard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            background: #fff;
+            border-radius: 12px;
+            transition: opacity 0.3s ease;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 20px;
+        }
+        .hint-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+        }
+        .hint-button:hover {
+            background: #0056b3;
+        }
+        .hint-box {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 200px;
+            font-size: 14px;
+            z-index: 20;
+            white-space: pre-wrap;
+        }
+        .nav-buttons {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .nav-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="flashcard-container">
+        <button class="hint-button" id="hintButton">Hint</button>
+        <div class="hint-box" id="hintBox"></div>
+        <div class="flashcard" id="flashcard">
+            <!-- Innholdet av kortet vil bli oppdatert med JavaScript -->
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-button" id="prevButton" onclick="prevCard()">Forrige</button>
+            <button class="nav-button" id="nextButton" onclick="nextCard()">Neste</button>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            { term: "Kvalitative beslutninger", definition: "Beslutninger basert på subjektive vurderinger og vurderinger.", hint: "Disse beslutningene er ofte basert på personlige vurderinger og erfaringer." },
+            { term: "Kvantitative beslutninger", definition: "Beslutninger basert på objektive data og målinger.", hint: "Disse beslutningene er basert på konkrete data og statistikk." },
+            { term: "Gradadverb", definition: "Ord som beskriver graden eller intensiteten av et adjektiv eller adverb.", hint: "Eksempler inkluderer 'svært', 'litt', og 'helt'." },
+            { term: "Riskoidentifisering", definition: "Prosessen med å identifisere potensielle risikoer som kan påvirke prosjektet eller systemet.", hint: "Dette er første trinn i risikohåndtering." },
+            { term: "Risikoevaluering", definition: "Prosessen med å vurdere risikoens sannsynlighet og konsekvenser for å prioritere håndtering.", hint: "Her vurderer du alvorlighetsgraden av identifiserte risikoer." },
+            { term: "Endringshåndtering", definition: "Prosessen med å styre endringer i systemer og prosesser for å minimere risiko.", hint: "Dette hjelper med å håndtere organisasjonsendringer uten å skape nye problemer." },
+            { term: "Trusselmodellering", definition: "Prosessen med å identifisere potensielle trusler mot systemer og prosesser.", hint: "Brukes for å forstå hvilke trusler som kan påvirke systemet." },
+            { term: "Sårbarhetsanalyse", definition: "Analyse av systemer for å identifisere svakheter som kan utnyttes.", hint: "Vurderer mulige sikkerhetshull i systemet." },
+            { term: "Risikohåndtering", definition: "Strategier og tiltak for å redusere eller håndtere identifiserte risikoer.", hint: "Handler om hvordan man effektivt kan håndtere risiko." }
+        ];
+
+        let currentCard = 0;
+
+        function updateCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.textContent = flashcards[currentCard].term;
+            flashcard.dataset.definition = flashcards[currentCard].definition;
+            document.getElementById('hintBox').textContent = flashcards[currentCard].hint;
+        }
+
+        function nextCard() {
+            if (currentCard < flashcards.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prevButton').disabled = currentCard === 0;
+            document.getElementById('nextButton').disabled = currentCard === flashcards.length - 1;
+        }
+
+        document.getElementById('flashcard').addEventListener('click', () => {
+            const flashcard = document.getElementById('flashcard');
+            if (flashcard.textContent === flashcard.dataset.definition) {
+                flashcard.textContent = flashcards[currentCard].term;
+            } else {
+                flashcard.textContent = flashcard.dataset.definition;
+            }
+        });
+
+        document.getElementById('hintButton').addEventListener('click', () => {
+            const hintBox = document.getElementById('hintBox');
+            hintBox.style.display = hintBox.style.display === 'block' ? 'none' : 'block';
+        });
+
+        updateCard();
+        updateButtons();
+    </script>
+</body>
+</html>
+
