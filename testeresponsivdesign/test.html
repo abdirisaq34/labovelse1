@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsivt design</title>
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <a href="test.html" class="logo">Logo</a>
+            <nav>
+                <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+                <ul id="menu" class="menu"></ul>
+                <li><a href="test.html">hjem</a></li>
+                <li><a href="#">om oss</a></li>
+                <li><a href="#">kontakt oss</a></li>
+            </nav>
+        </header>
+        <main>
+            <section class="articles">
+                <article>
+                    <h2>Artikkel 1</h2>
+                    <p>innhold i artikkel 1</p>
+                </article>
+                <article>
+                    <h2>artikkel 2</h2>
+                    <p>innhold i artikkel 2</p>
+                </article>
+                <article>
+                    <h2>artikkel 3</h2>
+                    <p>innhold i artikkel 3</p>
+                </article>
+            </section>
+            <aside>
+                <h3>nyheter</h3>
+                <p>andre aktulle nyheter</p>
+            </aside>
+        </main>
+        <footer>
+            <p>&copy; 2024 Min Enkle Nettside</p>
+        </footer> 
+    </div>
+
+    <script>
+        function toggleMenu(){
+            var menu = document.getElementById("menu")
+            menu.classList.toggle("show")
+        }
+    </script>
+</body>
+</html>
