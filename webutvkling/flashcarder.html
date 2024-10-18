@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards med Hint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .flashcard-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+        .flashcard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            background: #fff;
+            border-radius: 12px;
+            transition: opacity 0.3s ease;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 20px;
+        }
+        .hint-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+        }
+        .hint-button:hover {
+            background: #0056b3;
+        }
+        .hint-box {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 200px;
+            font-size: 14px;
+            z-index: 20;
+            white-space: pre-wrap;
+        }
+        .nav-buttons {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .nav-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="flashcard-container">
+        <button class="hint-button" id="hintButton">Hint</button>
+        <div class="hint-box" id="hintBox"></div>
+        <div class="flashcard" id="flashcard">
+            <!-- Innholdet av kortet vil bli oppdatert med JavaScript -->
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-button" id="prevButton" onclick="prevCard()">Forrige</button>
+            <button class="nav-button" id="nextButton" onclick="nextCard()">Neste</button>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            { term: "!DOCTYPE HTML", definition: "Erklæring som definerer HTML-versjonen for nettleseren.", hint: "Brukes for å informere nettlesere om hvilken versjon av HTML som brukes." },
+            { term: "HTML", definition: "Språk for å lage og strukturere nettsider.", hint: "Dette er standard markup-språket for å lage nettsider." },
+            { term: "Semantikk", definition: "Betydning og mening av innholdet i koden.", hint: "Semantisk HTML hjelper med å beskrive meningen med dokumentet." },
+            { term: "Tagger", definition: "Kodeelementer som definerer struktur og innhold på en nettside.", hint: "Tagger som <html>, <body>, <div> er grunnleggende byggeklosser i HTML." },
+            { term: "Javascript", definition: "Programmeringsspråk som legger til interaktivitet på nettsider.", hint: "Javascript kan brukes til å endre innhold og håndtere brukerinteraksjoner." },
+            { term: "Elementer", definition: "Kombinasjon av tagger og innhold som utgjør en del av nettsiden.", hint: "Elementer kan være enkle som <p> eller komplekse som <div> med flere tagger." },
+            { term: "Attributter", definition: "Ekstra informasjon gitt til en tagg f.eks. bildeadresse.", hint: "Brukes for å gi mer informasjon om et element, som src i <img>." },
+            { term: "Tag", definition: "Kode som markerer begynnelsen og slutten av et element.", hint: "Eksempler inkluderer <div>, <span> og <h1>." },
+            { term: "Head", definition: "Delen av HTML som inneholder metadata, titler og referanser til stiler og skript.", hint: "Inneholder informasjon som ikke vises direkte på siden." },
+            { term: "Body", definition: "Hoveddelen av HTML som inneholder det synlige innholdet på nettsiden.", hint: "Alt brukeren ser og interagerer med er plassert her." },
+            { term: "Metadata", definition: "Informasjon om nettsiden som ikke vises direkte, f.eks. beskrivelse og tegnsett.", hint: "Hjelper søkemotorer og nettlesere med å forstå siden." },
+            { term: "UU", definition: "Designprinsipper som gjør nettsider tilgjengelige for alle, inkludert personer med funksjonsnedsettelser.", hint: "Inkluderer bruk av farger, tekststørrelser og navigasjon." },
+            { term: "Standarder", definition: "Felles regler og spesifikasjoner for hvordan teknologi skal fungere som HTML og CSS-standarder.", hint: "Bidrar til interoperabilitet mellom ulike systemer." },
+            { term: "SEO", definition: "Metoder for å gjøre en nettside mer synlig i søkemotorer som Google.", hint: "Inkluderer bruk av nøkkelord og optimalisering av innhold." },
+            { term: "CSS", definition: "Språk for å styre utseendet og layouten til en nettside.", hint: "Brukes for å formatere elementer som farger, skrifttyper og avstander." },
+            { term: "Tilgjengelighet", definition: "Hvor lett en nettside kan brukes av alle, inkludert personer med ulike behov.", hint: "Inkluderer bruk av ARIA og semantiske tagger." },
+            { term: "Database", definition: "Organisert samling av data som kan lagres og hentes ut ved behov.", hint: "Brukes for å lagre informasjon som brukerdetaljer eller produktdata." },
+            { term: "WWW", definition: "Systemet av sammenkoblede dokumenter og ressurser på internett.", hint: "Basert på hypertekst og tilgjengelig via nettlesere." },
+            { term: "Frontend", definition: "Del av nettsiden som brukeren ser og interagerer med.", hint: "Omfatter alt visuelt innhold og brukergrensesnitt." },
+            { term: "Backend", definition: "Del av nettsiden som styrer funksjonaliteten og administrerer data usynlig for brukeren.", hint: "Inkluderer servere, databaser og applikasjonslogikk." },
+            { term: "Nettsted", definition: "En samling av relaterte nettsider under samme domene.", hint: "For eksempel kan et nettsted inneholde flere sider som 'om oss' og 'kontakt'." },
+            { term: "Nettside", definition: "En enkelt side på et nettsted med spesifikt innhold.", hint: "Hver nettside har en unik URL." },
+            { term: "Funksjonalitet", definition: "Evnen til en nettside eller app til å utføre bestemte oppgaver.", hint: "For eksempel kan en nettside ha funksjoner som søk, skjemaer og knapper." },
+            { term: "Innhold", definition: "Tekst, bilder, videoer og annet materiale på en nettside.", hint: "Det som gir verdi til brukerne." },
+            { term: "Design", definition: "Utseendet og layouten til en nettside, inkludert farger, skrifttyper og grafikk.", hint: "En god design forbedrer brukeropplevelsen." },
+            { term: "URL", definition: "Nettadressen som brukes for å finne en nettside.", hint: "En URL gir informasjon om protokoll, domene og ressurs." },
+            { term: "Server", definition: "Datamaskin eller programvare som leverer data, tjenester eller ressurser til andre datamaskiner over et nettverk.", hint: "Kan være fysisk eller virtuell." },
+            { term: "Article", definition: "En semantisk HTML-tag som brukes for å representere et selvstendig, selvforklarende innhold som en artikkel eller et blogginnlegg.", hint: "Innholdet i en article skal gi mening selv om det tas ut av sammenhengen med resten av siden." },
+            { term: "Section", definition: "En HTML-tag som brukes for å gruppere relaterte innholdselementer under et felles tema eller emne.", hint: "Hver section bør inneholde en overskrift (h1-h6) for å definere innholdets hierarki." },
+            { term: "NAV", definition: "En HTML-tag som brukes til å definere en navigasjonsmeny på en webside som for eksempel en hovedmeny eller en bunnmeny.", hint: "nav forbedrer tilgjengeligheten ved å hjelpe brukere og søkemotorer med å forstå strukturen på nettstedet." },
+            { term: "Header", definition: "En HTML-tag som brukes til å innkapsle innledende innhold som overskrifter, logoer eller navigasjonslinjer.", hint: "header kan brukes flere ganger på en side, men skal ikke være plassert inne i footer." },
+            { term: "Footer", definition: "En HTML-tag som brukes til å holde bunninnhold som kontaktinformasjon, lenker til personvernpolicy og annen informasjon som vises nederst på en webside.", hint: "Footeren gir ofte informasjon som er relevant for hele nettstedet." },
+            { term: "Aside", definition: "En HTML-tag som brukes til å plassere innhold som er relatert til hovedinnholdet, men ikke en del av det.", hint: "Typisk bruk inkluderer relaterte artikler, reklame eller lenker til relaterte sider." },
+            { term: "H1-H6", definition: "Disse HTML-taggene representerer forskjellige nivåer av overskrifter, hvor h1 er den høyeste nivåoverskriften (størst og viktigst) og h6 er den laveste (minst og minst viktig).", hint: "Brukes til å strukturere innhold hierarkisk." },
+            { term: "Anker(a) taggen", definition: "Anker-taggen (<a>) er en HTML-kode som brukes til å lage klikkbare lenker på en nettside.", hint: "Når du klikker på en slik lenke, blir du sendt til en annen side, seksjon av samme side eller åpner et dokument." },
+            { term: "Rel", definition: "rel er et attributt i anker-taggen som beskriver forholdet mellom den nåværende siden og siden som lenken fører til.", hint: "For eksempel rel='nofollow' forteller søkemotorer at de ikke skal følge denne lenken for SEO-formål." },
+            { term: "Target <a>", definition: "target er et attributt i anker-taggen som bestemmer hvordan lenken åpnes.", hint: "For eksempel target='_blank' åpner lenken i en ny fane eller et nytt vindu." },
+            { term: "Href <a>", definition: "href (hyperreference) er et attributt i anker-taggen som spesifiserer målet til lenken, altså hvilken nettside eller hvilket dokument du vil at brukeren skal besøke når de klikker på lenken.", hint: "Uten href vil ikke lenken fungere." },
+            { term: ":focus", definition: "er en CSS-stilregel som brukes for å definere hvordan en lenke ser ut når den er valgt eller klikket på, f.eks. ved å bruke tastaturet til å navigere.", hint: "Får lenker til å se annerledes ut for å indikere at de er aktive." },
+            { term: "#id", definition: "#id brukes i HTML for å identifisere en unik del av en nettside, som en bestemt seksjon eller element.", hint: "Dette kan kobles til en lenke slik at den peker til en spesifikk del av siden." },
+            { term: "Aria labels", definition: "Aria-labels er attributter som gjør nettsider mer tilgjengelige for personer med funksjonshemninger ved å gi ekstra informasjon om lenker eller andre elementer.", hint: "Hjelper skjermlesere å forklare innholdet bedre." },
+            { term: "Nofollow", definition: "nofollow er en verdi for rel-attributtet som forteller søkemotorer at de ikke skal følge denne lenken når de indekserer nettsiden.", hint: "Dette brukes ofte for lenker til reklame eller sponsede innhold." },
+            { term: "Form", definition: "En struktur i HTML som samler inn brukerdata for å sende til en server.", hint: "Den innrammer ulike input-felt, knapper og andre interaktive elementer." },
+            { term: "Label", definition: "Et HTML-element som kobles til et input-felt og gir en beskrivende tekst for hva brukeren skal fylle ut i feltet.", hint: "Forbedrer tilgjengeligheten ved å gjøre skjemaet mer forståelig." },
+            { term: "Textarea", definition: "Et HTML-element som gir et større tekstfelt hvor brukeren kan skrive inn lengre tekstinnhold som avsnitt eller flere linjer.", hint: "Brukes ofte i kontaktskjemaer." },
+            { term: "HTML skjema", definition: "En samling av HTML-elementer som brukes til å samle inn data fra brukere, ofte brukt i registreringsskjemaer, kontaktskjemaer osv.", hint: "Inkluderer input-felt, knapper, osv." },
+            { term: "Input", definition: "Et HTML-element som brukes til å opprette interaktive kontroller i et skjema, som tekstbokser, radioknapper, avkrysningsbokser osv.", hint: "Brukes for å samle inn brukerdata." },
+            { term: "Type", definition: "En attributt i et input-element som spesifiserer hvilken type data som skal samles inn, som text, password, email, radio, etc.", hint: "Bestemmer hvordan input-feltet oppfører seg." },
+            { term: "Name", definition: "En attributt i input- og andre HTML-elementer som brukes til å identifisere og gruppere data sendt fra skjemaet til en server.", hint: "Hjelper med å organisere data når de sendes." },
+            { term: "Value", definition: "En attributt som definerer den forhåndsutfylte verdien eller den faktiske verdien som sendes når skjemaet sendes inn.", hint: "Kan brukes for å angi standardverdier i skjemaer." },
+            { term: "Placeholder", definition: "En attributt i et input- eller textarea-element som viser en forklarende tekst i feltet som forsvinner når brukeren begynner å skrive.", hint: "Gir veiledning for hva som skal fylles ut." },
+            { term: "li", definition: "Et listeelement som brukes innenfor ul eller ol for å definere hvert punkt i en liste.", hint: "Brukes for å organisere elementer i en liste." },
+            { term: "Ul", definition: "Uordnet liste der rekkefølgen på elementene ikke har betydning, presentert som punkter.", hint: "Brukes ofte for å lage punkter i lister." },
+            { term: "Ol", definition: "Ordnet liste der rekkefølgen på elementene er viktig, presentert som nummererte punkter.", hint: "Brukes for å vise rekkefølge eller prioritering." },
+            { term: "Nøstede lister", definition: "Lister som ligger inni hverandre for å vise hierarki eller grupperinger.", hint: "Brukes for å organisere informasjon i lag." },
+            { term: "Table tag", definition: "HTML-tag som definerer en tabell for å organisere data i rader og kolonner.", hint: "Brukes for å presentere data i et strukturert format." },
+            { term: "Tr", definition: "Tabellrad som brukes til å gruppere tabellceller (th eller td) i én horisontal rad.", hint: "Brukes for å organisere innholdet i tabeller." },
+            { term: "Th", definition: "Tabellcelle for overskrifter som brukes til å representere kolonne- eller radetiketter.", hint: "Skiller overskriftene fra de vanlige dataene." },
+            { term: "Td", definition: "Tabellcelle for innhold/data som ligger i rader og kolonner.", hint: "Brukes for å vise faktiske data i tabellen." },
+            { term: "Thead", definition: "Semantisk tag som grupperer overskriftsceller (th) i tabellens toppdel.", hint: "Forbedrer lesbarheten og tilgjengeligheten." },
+            { term: "Tbody", definition: "Semantisk tag som grupperer de vanlige dataene (td) i tabellen, skilt fra overskriftene.", hint: "Hjelper med å strukturere dataene i tabellen." },
+            { term: "Scope", definition: "Attributt på th-celler som hjelper å knytte overskriftene til riktige rader eller kolonner og forbedrer tilgjengelighet.", hint: "Angir hva th-cellen refererer til." }
+        ];
+
+        let currentCard = 0;
+
+        function updateCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.textContent = flashcards[currentCard].term;
+            flashcard.dataset.definition = flashcards[currentCard].definition;
+            document.getElementById('hintBox').textContent = flashcards[currentCard].hint;
+        }
+
+        function nextCard() {
+            if (currentCard < flashcards.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prevButton').disabled = currentCard === 0;
+            document.getElementById('nextButton').disabled = currentCard === flashcards.length - 1;
+        }
+
+        document.getElementById('flashcard').addEventListener('click', () => {
+            const flashcard = document.getElementById('flashcard');
+            if (flashcard.textContent === flashcard.dataset.definition) {
+                flashcard.textContent = flashcards[currentCard].term;
+            } else {
+                flashcard.textContent = flashcard.dataset.definition;
+            }
+        });
+
+        document.getElementById('hintButton').addEventListener('click', () => {
+            const hintBox = document.getElementById('hintBox');
+            hintBox.style.display = hintBox.style.display === 'block' ? 'none' : 'block';
+        });
+
+        updateCard();
+        updateButtons();
+    </script>
+</body>
+</html>

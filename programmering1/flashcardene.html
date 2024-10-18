@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards med Hint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .flashcard-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+        .flashcard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            background: #fff;
+            border-radius: 12px;
+            transition: opacity 0.3s ease;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 20px;
+        }
+        .hint-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+        }
+        .hint-button:hover {
+            background: #0056b3;
+        }
+        .hint-box {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 200px;
+            font-size: 14px;
+            z-index: 20;
+            white-space: pre-wrap;
+        }
+        .nav-buttons {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .nav-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="flashcard-container">
+        <button class="hint-button" id="hintButton">Hint</button>
+        <div class="hint-box" id="hintBox"></div>
+        <div class="flashcard" id="flashcard"></div>
+        <div class="nav-buttons">
+            <button class="nav-button" id="prevButton" onclick="prevCard()">Forrige</button>
+            <button class="nav-button" id="nextButton" onclick="nextCard()">Neste</button>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            { term: "Kontaminering", definition: "Prosessen med å sammenkoble strenger.", hint: "Relatert til håndtering av tekst." },
+            { term: "Fnutt", definition: "En uformell betegnelse for enkeltnavnet eller dobbeltknappen som brukes for å definere strenger.", hint: "Ofte brukt i programmering." },
+            { term: "ZeroDivisionError", definition: "En innebygd feiltype som oppstår når du prøver å dele et tall med null.", hint: "En vanlig feil i beregninger." },
+            { term: "NameError", definition: "En feiltype som oppstår når du prøver å bruke en variabel som ikke er definert.", hint: "Sjekk om variabelen er riktig stavet." },
+            { term: "ValueError", definition: "En feiltype som oppstår når en funksjon mottar et argument av riktig type, men med et ugyldig verdiforventning.", hint: "Kan oppstå ved bruk av funksjoner." },
+            { term: "TypeError", definition: "En feiltype som oppstår når en operasjon eller funksjon brukes på en feil type objekt.", hint: "Sjekk datatypene." },
+            { term: "Tilordningsoperatører", definition: "Operatører som brukes til å tilordne verdier til variabler.", hint: "Brukes ofte i deklarasjoner." },
+            { term: "If-setninger", definition: "Kontrollstrukturer som brukes til å utføre kode basert på en betingelse.", hint: "Grunnleggende for beslutningstaking." },
+            { term: "Indeksering", definition: "Prosessen med å få tilgang til enkeltkarakterer eller elementer i en sekvens ved hjelp av en indeks.", hint: "Viktig for å navigere i lister." },
+            { term: "Else", definition: "En del av en if-else struktur som spesifiserer en blokk med kode som kjøres når betingelsen i if-setningen ikke er oppfylt.", hint: "Brukes for alternative handlinger." },
+            { term: "String", definition: "En datatype som representerer tekst.", hint: "En vanlig datatype i programmering." },
+            { term: "Datatyper", definition: "Klassifikasjoner av data som bestemmer hvilken type data en variabel kan holde.", hint: "Inkluderer int, float, string osv." },
+            { term: "Operatorer", definition: "Symboler som brukes til å utføre operasjoner på variabler og verdier.", hint: "Inkluderer +, -, *, /." },
+            { term: "Boolean", definition: "En datatype som representerer en verdi som enten er True eller False.", hint: "Brukes i logiske uttrykk." },
+            { term: "True", definition: "En innebygd konstant som representerer den logiske verdien sann.", hint: "Brukes i betingelser." },
+            { term: "False", definition: "En innebygd konstant som representerer den logiske verdien usann.", hint: "Brukes også i betingelser." },
+            { term: "Int", definition: "En datatype som representerer heltall.", hint: "Brukes for hele tall." },
+            { term: "For-løkke", definition: "En kontrollstruktur som gjentar en kodeblokk et bestemt antall ganger.", hint: "Brukes for iterasjoner." },
+            { term: "While-løkke", definition: "En kontrollstruktur som gjentar en kodeblokk så lenge en gitt betingelse er sann.", hint: "Kan føre til uendelige løkker hvis ikke riktig." },
+            { term: "Løkke", definition: "En grunnleggende programmeringsstruktur som brukes til å utføre en kodeblokk flere ganger.", hint: "Kan være for- eller while-løkke." }
+        ];
+
+        let currentCard = 0;
+
+        function updateCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.textContent = flashcards[currentCard].term;
+            flashcard.dataset.definition = flashcards[currentCard].definition;
+            document.getElementById('hintBox').textContent = flashcards[currentCard].hint;
+        }
+
+        function nextCard() {
+            if (currentCard < flashcards.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prevButton').disabled = currentCard === 0;
+            document.getElementById('nextButton').disabled = currentCard === flashcards.length - 1;
+        }
+
+        document.getElementById('flashcard').addEventListener('click', () => {
+            const flashcard = document.getElementById('flashcard');
+            if (flashcard.textContent === flashcard.dataset.definition) {
+                flashcard.textContent = flashcards[currentCard].term;
+            } else {
+                flashcard.textContent = flashcard.dataset.definition;
+            }
+        });
+
+        document.getElementById('hintButton').addEventListener('click', () => {
+            const hintBox = document.getElementById('hintBox');
+            hintBox.style.display = hintBox.style.display === 'block' ? 'none' : 'block';
+        });
+
+        updateCard();
+        updateButtons();
+    </script>
+</body>
+</html>
+
+
+
+
+
