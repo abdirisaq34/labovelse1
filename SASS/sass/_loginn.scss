@@ -1,0 +1,33 @@
+@use 'colors.scss' as *;
+@use 'mixins.scss' as *;
+@use 'design.scss' as *;
+@use 'layout.scss' as *;
+form{
+    color: $black;
+    @extend .blurred-effect;
+    @include flexbox(column, nowrap, 1rem );
+    @include box(600px, auto, 3rem, 30px);
+
+    label{
+        @include box(100%,auto ,1rem ,50px);
+        @include flexbox(row, nowrap, 1rem);
+        display: flex !important;
+        width: 50px;
+        background-color: black;
+        color: white;
+
+        i{
+            @include box(50px, 50px, 0.5rem, 100%)
+        }
+        input{
+            border: none;
+        }
+
+    input{
+            @include box(200px, auto, 1rem, 10px);
+            background-color: $white
+        }
+    }
+
+    
+}
