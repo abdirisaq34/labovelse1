@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards med Hint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .flashcard-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+        .flashcard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 12px;
+            transition: opacity 0.3s ease;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 20px;
+        }
+        .hint-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+        }
+        .hint-button:hover {
+            background: #0056b3;
+        }
+        .hint-box {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 200px;
+            font-size: 14px;
+            z-index: 20;
+            white-space: pre-wrap;
+        }
+        .nav-buttons {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .nav-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="flashcard-container">
+        <button class="hint-button" id="hintButton">Hint</button>
+        <div class="hint-box" id="hintBox"></div>
+        <div class="flashcard" id="flashcard"></div>
+        <div class="nav-buttons">
+            <button class="nav-button" id="prevButton" onclick="prevCard()">Forrige</button>
+            <button class="nav-button" id="nextButton" onclick="nextCard()">Neste</button>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            { term: "Kunstig intelligens", definition: "Simulering av menneskelig intelligens i maskiner.", hint: "KI har eksistert i flere tiår." },
+            { term: "Smal KI", definition: "KI begrenset til spesifikke oppgaver som anbefalinger.", hint: "Eksempler inkluderer filmforslag." },
+            { term: "Generell KI", definition: "KI som kan utføre komplekse menneskelige oppgaver.", hint: "Mål for fremtidens KI." },
+            { term: "Superintelligens", definition: "KI som overgår menneskelig intelligens på alle felt.", hint: "Diskutert som et ambisiøst mål." },
+            { term: "Generativ KI", definition: "KI som skaper innhold basert på det den har lært.", hint: "Brukes til tekst, bilder, og videoer." },
+            { term: "Multimodale modeller", definition: "KI som håndterer flere typer input som video og tekst.", hint: "Kan bearbeide lyd, bilder, og tekst samtidig." },
+            { term: "Bildegenerering", definition: "Skape bilder basert på tekstbeskrivelser.", hint: "Nyttig i historiske sammenhenger." },
+            { term: "Diffusjonsmodeller", definition: "KI-trening som fjerner støy fra bilder for å skape klare detaljer.", hint: "Omformer støy til detaljerte bilder." },
+            { term: "Kontekstvindu", definition: "Mengden informasjon KI kan behandle samtidig.", hint: "Måles i tokens, ikke ord." },
+            { term: "Fordommer og bias", definition: "KI kan forsterke eksisterende samfunnsfordommer.", hint: "Trent på skjev data." },
+            { term: "Feilinformasjon", definition: "KI kan 'finne på' informasjon uten nok data.", hint: "Kan gi feilaktige referanser." },
+            { term: "Utdatert informasjon", definition: "KI-modeller kan ikke oppdatere seg selv med nyere informasjon.", hint: "KI trent før 2021 vil ikke kjenne til ny forskning." },
+            { term: "Personvern", definition: "Bruk av KI kan true personvern hvis sensitive data brukes.", hint: "Sensitiv informasjon må beskyttes." },
+            { term: "Dataklassifisering", definition: "System for å beskytte data basert på sensitivitet.", hint: "Klasser: Grønn, Gul, Rød, Sort." },
+            { term: "Prompt Engineering", definition: "Teknikker for å kommunisere effektivt med KI.", hint: "Tydelige instrukser gir bedre resultater." },
+            { term: "Few-shot learning", definition: "Trening av KI med få eksempler for spesifikke resultater.", hint: "Et eksempel på Prompt Engineering." },
+            { term: "Bias og diskriminering", definition: "KI kan reprodusere samfunnets diskriminerende mønstre.", hint: "Eksempler finnes i algoritmer som favoriserer menn." },
+            { term: "Opphavsrett", definition: "Generativ KI utfordrer eksisterende lover om opphavsrett.", hint: "Hvem eier verkene som KI skaper?" },
+            { term: "Datasikkerhet", definition: "Godkjente verktøy sikrer datasikkerheten i KI-systemer.", hint: "KI-modeller må følge strenge sikkerhetsstandarder." },
+            { term: "Kildekritikk", definition: "KI krever kritisk vurdering for å unngå feilinformasjon.", hint: "KI-genererte tekster kan inneholde feil." }
+        ];
+
+        let currentCard = 0;
+
+        function updateCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.textContent = flashcards[currentCard].term;
+            flashcard.dataset.definition = flashcards[currentCard].definition;
+            document.getElementById('hintBox').textContent = flashcards[currentCard].hint;
+        }
+
+        function nextCard() {
+            if (currentCard < flashcards.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prevButton').disabled = currentCard === 0;
+            document.getElementById('nextButton').disabled = currentCard === flashcards.length - 1;
+        }
+
+        document.getElementById('flashcard').addEventListener('click', () => {
+            const flashcard = document.getElementById('flashcard');
+            if (flashcard.textContent === flashcard.dataset.definition) {
+                flashcard.textContent = flashcards[currentCard].term;
+            } else {
+                flashcard.textContent = flashcard.dataset.definition;
+            }
+        });
+
+        document.getElementById('hintButton').addEventListener('click', () => {
+            const hintBox = document.getElementById('hintBox');
+            hintBox.style.display = hintBox.style.display === 'block' ? 'none' : 'block';
+        });
+
+        updateCard();
+        updateButtons();
+    </script>
+</body>
+</html>
