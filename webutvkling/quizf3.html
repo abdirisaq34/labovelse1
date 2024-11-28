@@ -64,6 +64,14 @@
 </div>
 
 <script>
+    // Funksjon for å stokke et array tilfeldig
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
     // Spørsmål og svar
     const quizData = [
         {
@@ -182,6 +190,9 @@
 
     function loadQuiz() {
         quizData.forEach((q, index) => {
+            // Stokk svaralternativene
+            shuffle(q.answers);
+
             let questionElement = document.createElement('div');
             questionElement.classList.add('question');
             questionElement.innerHTML = `<p>${q.question}</p>`;
@@ -233,4 +244,3 @@
 
 </body>
 </html>
-
