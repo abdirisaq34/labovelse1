@@ -78,16 +78,545 @@
 
     <script>
         const questions = [
-            { type: "definition", word: "!DOCTYPE HTML", correct: "Erklæring som definerer HTML-versjonen for nettleseren.", options: ["Språk for å lage og strukturere nettsider.", "Erklæring som definerer HTML-versjonen for nettleseren.", "Kodeelementer som definerer struktur og innhold på en nettside."] },
+                { type: "definition", word: "!DOCTYPE HTML", correct: "Erklæring som definerer HTML-versjonen for nettleseren.", options: ["Språk for å lage og strukturere nettsider.", "Erklæring som definerer HTML-versjonen for nettleseren.", "Kodeelementer som definerer struktur og innhold på en nettside."] },
             { type: "definition", word: "HTML", correct: "Språk for å lage og strukturere nettsider.", options: ["Språk for å lage og strukturere nettsider.", "Betydning og mening av innholdet i koden.", "Programmeringsspråk som legger til interaktivitet på nettsider."] },
-            { type: "definition", word: "Javascript", correct: "Programmeringsspråk som legger til interaktivitet på nettsider.", options: ["Programmeringsspråk som legger til interaktivitet på nettsider.", "Språk for å lage og strukturere nettsider.", "Erklæring som definerer HTML-versjonen for nettleseren."] },
+            { type: "definition", word: "Semantikk", correct: "Betydning og mening av innholdet i koden.", options: ["Betydning og mening av innholdet i koden.", "Språk for å lage og strukturere nettsider.", "Kodeelementer som definerer struktur og innhold på en nettside."] },
             { type: "definition", word: "Tagger", correct: "Kodeelementer som definerer struktur og innhold på en nettside.", options: ["Kodeelementer som definerer struktur og innhold på en nettside.", "Betydning og mening av innholdet i koden.", "Språk for å lage og strukturere nettsider."] },
-            { type: "word", definition: "Informasjon om nettsiden, som ikke vises direkte, f.eks. beskrivelse og tegnsett.", correct: "Metadata", options: ["Metadata", "Semantikk", "UU"] },
-            { type: "word", definition: "Metoder for å gjøre en nettside mer synlig i søkemotorer som Google.", correct: "SEO", options: ["SEO", "Tilgjengelighet", "CSS"] },
-            { type: "definition", word: "CSS", correct: "Språk for å styre utseendet og layouten til en nettside.", options: ["Språk for å styre utseendet og layouten til en nettside.", "Språk for å lage og strukturere nettsider.", "Kode som markerer begynnelsen og slutten av et element."] },
-            { type: "definition", word: "URL", correct: "Nettadressen som brukes for å finne en nettside.", options: ["Nettadressen som brukes for å finne en nettside.", "Datamaskin eller programvare som leverer data, tjenester eller ressurser til andre datamaskiner over et nettverk.", "Systemet av sammenkoblede dokumenter og ressurser på internett."] },
-            { type: "word", definition: "En HTML-tag som brukes til å definere en navigasjonsmeny på en webside.", correct: "NAV", options: ["NAV", "Header", "Footer"] },
-            // ... (legg til alle andre spørsmål her)
+            { type: "definition", word: "Javascript", correct: "Programmeringsspråk som legger til interaktivitet på nettsider.", options: ["Programmeringsspråk som legger til interaktivitet på nettsider.", "Språk for å lage og strukturere nettsider.", "Erklæring som definerer HTML-versjonen for nettleseren."] },
+            { type: "definition", word: "Elementer", correct: "Kombinasjon av tagger og innhold som utgjør en del av nettsiden.", options: ["Kombinasjon av tagger og innhold som utgjør en del av nettsiden.", "Metode for å lage interaktive nettsider.", "Enkelte koder som gir interaktivitet."] },
+            { type: "definition", word: "Attributter", correct: "Ekstra informasjon gitt til en tagg, f.eks. bildeadresse.", options: ["Ekstra informasjon gitt til en tagg, f.eks. bildeadresse.", "Kombinasjon av tagger og innhold som utgjør en del av nettsiden.", "Kodestruktur for innhold på en nettside."] },
+            { type: "definition", word: "Tag", correct: "Kode som markerer begynnelsen og slutten av et element.", options: ["Kode som markerer begynnelsen og slutten av et element.", "Metode for å lage interaktive nettsider.", "Enkelte koder som gir interaktivitet."] },
+            { type: "definition", word: "Head", correct: "Delen av HTML som inneholder metadata, titler og referanser til stiler og skript.", options: ["Delen av HTML som inneholder metadata, titler og referanser til stiler og skript.", "Hoveddelen av HTML som inneholder synlig innhold.", "System for strukturert nettsideinnhold."] },
+            { type: "definition", word: "Body", correct: "Hoveddelen av HTML som inneholder det synlige innholdet på nettsiden.", options: ["Hoveddelen av HTML som inneholder det synlige innholdet på nettsiden.", "Delen av HTML som inneholder metadata, titler og referanser til stiler og skript.", "En samling av relaterte nettsider under samme domene."] },
+            { type: "definition", word: "metadata", correct: "Informasjon om nettsiden, som ikke vises direkte, f.eks. beskrivelse og tegnsett.", options: ["Informasjon om nettsiden, som ikke vises direkte, f.eks. beskrivelse og tegnsett.", "Designprinsipper som gjør nettsider tilgjengelige for alle.", "Språk for å styre utseendet og layouten til en nettside."] },
+            { type: "definition", word: "UU", correct: "Designprinsipper som gjør nettsider tilgjengelige for alle, inkludert personer med funksjonsnedsettelser.", options: ["Designprinsipper som gjør nettsider tilgjengelige for alle, inkludert personer med funksjonsnedsettelser.", "Informasjon om nettsiden som ikke vises direkte.", "Kombinasjon av tagger og innhold som utgjør en del av nettsiden."] },
+            { type: "definition", word: "Standarer", correct: "Felles regler og spesifikasjoner for hvordan teknologi skal fungere, som HTML og CSS-standarder.", options: ["Felles regler og spesifikasjoner for hvordan teknologi skal fungere, som HTML og CSS-standarder.", "En samling av relaterte nettsider under samme domene.", "Kombinasjon av tagger og innhold som utgjør en del av nettsiden."] },
+            { type: "definition", word: "SEO", correct: "Metoder for å gjøre en nettside mer synlig i søkemotorer som Google.", options: ["Metoder for å gjøre en nettside mer synlig i søkemotorer som Google.", "Språk for å styre utseendet og layouten til en nettside.", "Metode for å lage interaktive nettsider."] },
+            { type: "definition", word: "CSS", correct: "Språk for å styre utseendet og layouten til en nettside.", options: ["Språk for å styre utseendet og layouten til en nettside.", "Programmeringsspråk som legger til interaktivitet på nettsider.", "Erklæring som definerer HTML-versjonen for nettleseren."] },
+            { type: "definition", word: "Tilgjengelighet", correct: "Hvor lett en nettside kan brukes av alle, inkludert personer med ulike behov.", options: ["Hvor lett en nettside kan brukes av alle, inkludert personer med ulike behov.", "Språk for å lage og strukturere nettsider.", "Systemet av sammenkoblede dokumenter og ressurser på internett."] },
+            { type: "definition", word: "Database", correct: "Organisert samling av data som kan lagres og hentes ut ved behov.", options: ["Organisert samling av data som kan lagres og hentes ut ved behov.", "Del av nettsiden som styrer funksjonaliteten.", "Enkelte koder som gir interaktivitet."] },
+            { type: "definition", word: "WWW Worldwide web", correct: "Systemet av sammenkoblede dokumenter og ressurser på internett.", options: ["Systemet av sammenkoblede dokumenter og ressurser på internett.", "Språk for å lage og strukturere nettsider.", "En samling av relaterte nettsider under samme domene."] },
+            { type: "definition", word: "Frontend", correct: "Del av nettsiden som brukeren ser og interagerer med.", options: ["Del av nettsiden som brukeren ser og interagerer med.", "Del av nettsiden som styrer funksjonaliteten og administrerer data, usynlig for brukeren.", "Programmeringsspråk som legger til interaktivitet på nettsider."] },
+            { type: "definition", word: "Backend", correct: "Del av nettsiden som styrer funksjonaliteten og administrerer data, usynlig for brukeren.", options: ["Del av nettsiden som styrer funksjonaliteten og administrerer data, usynlig for brukeren.", "Del av nettsiden som brukeren ser og interagerer med.", "Enkelte koder som gir interaktivitet."] },
+            { type: "definition", word: "Nettsted", correct: "En samling av relaterte nettsider under samme domene.", options: ["En samling av relaterte nettsider under samme domene.", "Enkeltside på et nettsted, med spesifikt innhold.", "Del av nettsiden som styrer funksjonaliteten."] },
+            { type: "definition", word: "Nettside", correct: "En enkelt side på et nettsted, med spesifikt innhold.", options: ["En enkelt side på et nettsted, med spesifikt innhold.", "En samling av relaterte nettsider under samme domene.", "Del av nettsiden som styrer funksjonaliteten."] },
+            { type: "definition", word: "Funksjonalitet", correct: "Evnen til en nettside eller app til å utføre bestemte oppgaver.", options: ["Evnen til en nettside eller app til å utføre bestemte oppgaver.", "Hvordan innhold presenteres på nettsiden.", "Metode for å lage interaktive nettsider."] },
+            { type: "definition", word: "Innhold", correct: "Tekst, bilder, videoer og annet materiale på en nettside.", options: ["Tekst, bilder, videoer og annet materiale på en nettside.", "Språk for å styre utseendet og layouten til en nettside.", "System for strukturert nettsideinnhold."] },
+            { type: "definition", word: "URL", correct: "Adresse til en nettside på internett.", options: ["Adresse til en nettside på internett.", "Språk for å lage og strukturere nettsider.", "Metode for å lage interaktive nettsider."] },
+            { type: "definition", word: "Server", correct: "Maskin som lagrer data og gir tilgang til nettsider over internett.", options: ["Maskin som lagrer data og gir tilgang til nettsider over internett.", "Del av nettsiden som styrer funksjonaliteten.", "En samling av relaterte nettsider under samme domene."] },
+            {
+              type: "definition", word: "Article",correct: "En semantisk HTML-tag som brukes for å representere et selvstendig, selvforklarende innhold, som en artikkel eller et blogginnlegg.",options: [
+               "En semantisk HTML-tag som brukes for å representere et selvstendig, selvforklarende innhold, som en artikkel eller et blogginnlegg.",
+               "En HTML-tagg for navigasjon.",
+               "En type form for innhold.",
+                "En del av en tabell."
+           ]
+           },
+           {
+                type: "definition",
+                word: "Section",
+                correct: "En HTML-tag som brukes for å gruppere relaterte innholdselementer under et felles tema eller emne.",
+                options: [
+                "En HTML-tag som brukes for å gruppere relaterte innholdselementer under et felles tema eller emne.",
+                "En type tabellcelle.",
+                "En type bildekomponent.",
+                "En stilregel for layout."
+            ]
+        },
+        {
+                    type: "definition",
+                    word: "NAV",
+                    correct: "En HTML-tag som brukes til å definere en navigasjonsmeny på en webside.",
+                    options: [
+                    "En HTML-tag som brukes til å definere en navigasjonsmeny på en webside.",
+                    "En type listeelement.",
+                    "En del av et skjema.",
+                    "En overskrift."
+        ]
+         },
+         {
+    type: "definition",
+    word: "Header",
+    correct: "En HTML-tag som brukes til å innkapsle innledende innhold som overskrifter, logoer eller navigasjonslinjer.",
+    options: [
+      "En HTML-tag som brukes til å innkapsle innledende innhold som overskrifter, logoer eller navigasjonslinjer.",
+      "En type tabellinnhold.",
+      "En form for multimedia.",
+      "En stilregel for farger."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Footer",
+    correct: "En HTML-tag som brukes til å holde bunninnhold som kontaktinformasjon og lenker.",
+    options: [
+      "En HTML-tag som brukes til å holde bunninnhold som kontaktinformasjon og lenker.",
+      "En overskrift for tabellen.",
+      "En type skjemaelement.",
+      "En navigasjonskomponent."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Aside",
+    correct: "En HTML-tag som brukes til å plassere innhold relatert til hovedinnholdet, men ikke en del av det.",
+    options: [
+      "En HTML-tag som brukes til å plassere innhold relatert til hovedinnholdet, men ikke en del av det.",
+      "En type tabellcelle.",
+      "En formkomponent for bilder.",
+      "En stilregel for font."
+    ]
+  },
+  {
+    type: "definition",
+    word: "H1-H6",
+    correct: "HTML-tagger som representerer forskjellige nivåer av overskrifter, hvor h1 er den høyeste nivåoverskriften.",
+    options: [
+      "HTML-tagger som representerer forskjellige nivåer av overskrifter, hvor h1 er den høyeste nivåoverskriften.",
+      "En type listekomponent.",
+      "En navigasjonsmeny.",
+      "En stilregel for bakgrunn."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Anker (a) tag",
+    correct: "Anker-taggen (<a>) brukes til å lage klikkbare lenker på en nettside.",
+    options: [
+      "Anker-taggen (<a>) brukes til å lage klikkbare lenker på en nettside.",
+      "En tabellcelle.",
+      "En form for tekstfelt.",
+      "En stilregel for skrifttype."
+    ]
+  },
+  {
+    type: "definition",
+    word: "rel",
+    correct: "rel er et attributt i anker-taggen som beskriver forholdet mellom den nåværende siden og siden som lenken fører til.",
+    options: [
+      "rel er et attributt i anker-taggen som beskriver forholdet mellom den nåværende siden og siden som lenken fører til.",
+      "Definerer farge på lenken.",
+      "Bestemmer størrelsen på lenken.",
+      "Viser informasjon om tabellen."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Target <a>",
+    correct: "target er et attributt i anker-taggen som bestemmer hvordan lenken åpnes, f.eks. i en ny fane.",
+    options: [
+      "target er et attributt i anker-taggen som bestemmer hvordan lenken åpnes, f.eks. i en ny fane.",
+      "Bestemmer lengden på lenken.",
+      "Endrer fargen på lenken.",
+      "Viser en bildeoversikt."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Href <a>",
+    correct: "href (hyperreference) er et attributt i anker-taggen som spesifiserer målet til lenken.",
+    options: [
+      "href (hyperreference) er et attributt i anker-taggen som spesifiserer målet til lenken.",
+      "Er en stilregel for lenker.",
+      "Bestemmer størrelsen på teksten.",
+      "Endrer bakgrunnen."
+    ]
+  },
+  {
+    type: "definition",
+    word: ":focus",
+    correct: "er en CSS-stilregel som brukes for å definere hvordan en lenke ser ut når den er valgt eller klikket på.",
+    options: [
+      "er en CSS-stilregel som brukes for å definere hvordan en lenke ser ut når den er valgt eller klikket på.",
+      "En tabellregel.",
+      "En stil for tekstfarge.",
+      "Bestemmer fontstørrelsen."
+    ]
+  },
+  {
+    type: "definition",
+    word: "#id",
+    correct: "#id brukes i HTML for å identifisere en unik del av en nettside.",
+    options: [
+      "#id brukes i HTML for å identifisere en unik del av en nettside.",
+      "Er en formkontroll.",
+      "En type stilregel.",
+      "Bestemmer tabellhøyde."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Aria labels",
+    correct: "Aria-labels er attributter som gjør nettsider mer tilgjengelige for personer med funksjonshemninger.",
+    options: [
+      "Aria-labels er attributter som gjør nettsider mer tilgjengelige for personer med funksjonshemninger.",
+      "En form for tekstkommentar.",
+      "Bestemmer lenkestil.",
+      "En type navigasjonskomponent."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Nofollow",
+    correct: "nofollow er en verdi for rel-attributtet som forteller søkemotorer at de ikke skal følge denne lenken.",
+    options: [
+      "nofollow er en verdi for rel-attributtet som forteller søkemotorer at de ikke skal følge denne lenken.",
+      "Definerer tekstfarge.",
+      "Bestemmer bakgrunnsfarge.",
+      "Er en tabellkode."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Form",
+    correct: "En struktur i HTML som samler inn brukerdata for å sende til en server. Den innrammer ulike input-felt, knapper, og andre interaktive elementer.",
+    options: [
+      "En struktur i HTML som samler inn brukerdata for å sende til en server. Den innrammer ulike input-felt, knapper, og andre interaktive elementer.",
+      "En type HTML-tabell.",
+      "En HTML-komponent for bilder.",
+      "En type overskrift."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Label",
+    correct: "Et HTML-element som kobles til et input-felt, og gir en beskrivende tekst for hva brukeren skal fylle ut i feltet.",
+    options: [
+      "Et HTML-element som kobles til et input-felt, og gir en beskrivende tekst for hva brukeren skal fylle ut i feltet.",
+      "En type tabellcelle.",
+      "En stilregel for tekststørrelse.",
+      "En form for meny."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Textarea",
+    correct: "Et HTML-element som gir et større tekstfelt hvor brukeren kan skrive inn lengre tekstinnhold, som avsnitt eller flere linjer.",
+    options: [
+      "Et HTML-element som gir et større tekstfelt hvor brukeren kan skrive inn lengre tekstinnhold, som avsnitt eller flere linjer.",
+      "En form for bildeelement.",
+      "En type liste.",
+      "En skjema-knapp."
+    ]
+  },
+  {
+    type: "definition",
+    word: "HTML skjema",
+    correct: "En samling av HTML-elementer som brukes til å samle inn data fra brukere, ofte brukt i registreringsskjemaer, kontaktskjemaer osv.",
+    options: [
+      "En samling av HTML-elementer som brukes til å samle inn data fra brukere, ofte brukt i registreringsskjemaer, kontaktskjemaer osv.",
+      "En type tabell.",
+      "En stilregel for tekstinnhold.",
+      "En form for navigasjonsmeny."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Input",
+    correct: "Et HTML-element som brukes til å opprette interaktive kontroller i et skjema, som tekstbokser, radioknapper, avkrysningsbokser, osv.",
+    options: [
+      "Et HTML-element som brukes til å opprette interaktive kontroller i et skjema, som tekstbokser, radioknapper, avkrysningsbokser, osv.",
+      "En type listekomponent.",
+      "En form for tabell.",
+      "En stilregel for elementer."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Type",
+    correct: "En attributt i et input-element som spesifiserer hvilken type data som skal samles inn, som text, password, email, radio, etc.",
+    options: [
+      "En attributt i et input-element som spesifiserer hvilken type data som skal samles inn, som text, password, email, radio, etc.",
+      "Definerer tabellens rader.",
+      "En stilregel for font.",
+      "Bestemmer bakgrunnsfargen."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Name",
+    correct: "En attributt i input- og andre HTML-elementer som brukes til å identifisere og gruppere data sendt fra skjemaet til en server.",
+    options: [
+      "En attributt i input- og andre HTML-elementer som brukes til å identifisere og gruppere data sendt fra skjemaet til en server.",
+      "En type tabellrad.",
+      "Definerer fargen på teksten.",
+      "En stilregel for knapper."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Value",
+    correct: "En attributt som definerer den forhåndsutfylte verdien eller den faktiske verdien som sendes når skjemaet sendes inn.",
+    options: [
+      "En attributt som definerer den forhåndsutfylte verdien eller den faktiske verdien som sendes når skjemaet sendes inn.",
+      "En type tabellkomponent.",
+      "En stilregel for linker.",
+      "Definerer fontstørrelse."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Placeholder",
+    correct: "En attributt i et input- eller textarea-element som viser en forklarende tekst i feltet som forsvinner når brukeren begynner å skrive.",
+    options: [
+      "En attributt i et input- eller textarea-element som viser en forklarende tekst i feltet som forsvinner når brukeren begynner å skrive.",
+      "En type listeelement.",
+      "En form for tabellhode.",
+      "Definerer bakgrunnsfarge."
+    ]
+  },
+  {
+    type: "definition",
+    word: "li",
+    correct: "Et listeelement som brukes innenfor ul eller ol for å definere hvert punkt i en liste.",
+    options: [
+      "Et listeelement som brukes innenfor ul eller ol for å definere hvert punkt i en liste.",
+      "En type skjemaelement.",
+      "En form for tabellcelle.",
+      "En stilregel for lenker."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Ul",
+    correct: "Uordnet liste der rekkefølgen på elementene ikke har betydning, presentert som punkter.",
+    options: [
+      "Uordnet liste der rekkefølgen på elementene ikke har betydning, presentert som punkter.",
+      "En type tabell.",
+      "En form for tekstfelt.",
+      "En type radio-knapp."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Ol",
+    correct: "Ordnet liste der rekkefølgen på elementene er viktig, presentert som nummererte punkter.",
+    options: [
+      "Ordnet liste der rekkefølgen på elementene er viktig, presentert som nummererte punkter.",
+      "En type tabell.",
+      "En form for input.",
+      "En stilregel for font."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Nøstede lister",
+    correct: "Lister som ligger inni hverandre, for å vise hierarki eller grupperinger.",
+    options: [
+      "Lister som ligger inni hverandre, for å vise hierarki eller grupperinger.",
+      "En form for skjema.",
+      "En type tabellrad.",
+      "En stilregel for bakgrunn."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Table tag",
+    correct: "HTML-tag som definerer en tabell for å organisere data i rader og kolonner.",
+    options: [
+      "HTML-tag som definerer en tabell for å organisere data i rader og kolonner.",
+      "En type listekomponent.",
+      "En form for input.",
+      "En stilregel for farge."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Tr",
+    correct: "Tabellrad som brukes til å gruppere tabellceller (th eller td) i én horisontal rad.",
+    options: [
+      "Tabellrad som brukes til å gruppere tabellceller (th eller td) i én horisontal rad.",
+      "En type formfelt.",
+      "En stilregel for tekst.",
+      "En listekomponent."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Th",
+    correct: "Tabellcelle for overskrifter som brukes til å representere kolonne- eller radetiketter.",
+    options: [
+      "Tabellcelle for overskrifter som brukes til å representere kolonne- eller radetiketter.",
+      "En form for liste.",
+      "En type skjemaelement.",
+      "En stilregel for bakgrunn."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Td",
+    correct: "Tabellcelle for innhold/data som ligger i rader og kolonner.",
+    options: [
+      "Tabellcelle for innhold/data som ligger i rader og kolonner.",
+      "En type input.",
+      "En form for skjema.",
+      "En listekomponent."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Thead",
+    correct: "Semantisk tag som grupperer overskriftsceller (th) i tabellens toppdel.",
+    options: [
+      "Semantisk tag som grupperer overskriftsceller (th) i tabellens toppdel.",
+      "En type listeelement.",
+      "En form for tekstfelt.",
+      "En stilregel for font."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Tbody",
+    correct: "Semantisk tag som grupperer de vanlige dataene (td) i tabellen, skilt fra overskriftene.",
+    options: [
+      "Semantisk tag som grupperer de vanlige dataene (td) i tabellen, skilt fra overskriftene.",
+      "En type tabellrad.",
+      "En form for input.",
+      "En stilregel for farge."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Scope",
+    correct: "Attributt på th-celler som hjelper å knytte overskriftene til riktige rader eller kolonner, og forbedrer tilgjengelighet.",
+    options: [
+      "Attributt på th-celler som hjelper å knytte overskriftene til riktige rader eller kolonner, og forbedrer tilgjengelighet.",
+      "En type form.",
+      "En stilregel for tekststørrelse.",
+      "En form for liste."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Tilgjengelig design",
+    correct: "Design som sikrer at nettsider kan brukes av alle, inkludert personer med funksjonsnedsettelser, ved å følge retningslinjer som WCAG (Web Content Accessibility Guidelines). Det inkluderer bruk av kontrast, skjermleser-kompatibilitet, og navigasjon uten mus.",
+    options: [
+      "Design som sikrer at nettsider kan brukes av alle, inkludert personer med funksjonsnedsettelser, ved å følge retningslinjer som WCAG (Web Content Accessibility Guidelines). Det inkluderer bruk av kontrast, skjermleser-kompatibilitet, og navigasjon uten mus.",
+      "En type tabell.",
+      "En form for input.",
+      "En stilregel for farger."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Lesbarhet",
+    correct: "Hvor enkelt det er å lese og forstå tekst på en nettside, som påvirkes av faktorer som skrifttype, størrelse, linjehøyde, kontrast, og layout. Målet er å gjøre innholdet klart og tilgjengelig for alle brukere.",
+    options: [
+      "Hvor enkelt det er å lese og forstå tekst på en nettside, som påvirkes av faktorer som skrifttype, størrelse, linjehøyde, kontrast, og layout. Målet er å gjøre innholdet klart og tilgjengelig for alle brukere.",
+      "En form for skjema.",
+      "En type tabellcelle.",
+      "En stilregel for tekstfarger."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Tittel headers tabell",
+    correct: "Bruk av HTML-elementer som <h1>, <h2>, osv. (overskrifter) for å strukturere innhold på en nettside, samt bruk av <table> for å presentere data i tabellform. Overskrifter brukes for å organisere informasjon hierarkisk, mens tabeller brukes til å vise relaterte data på en ryddig måte.",
+    options: [
+      "Bruk av HTML-elementer som <h1>, <h2>, osv. (overskrifter) for å strukturere innhold på en nettside, samt bruk av <table> for å presentere data i tabellform. Overskrifter brukes for å organisere informasjon hierarkisk, mens tabeller brukes til å vise relaterte data på en ryddig måte.",
+      "En type liste.",
+      "En stilregel for tekst.",
+      "En form for input."
+    ]
+  },
+  {
+    type: "definition",
+    word: "CMS",
+    correct: "Content Management System er en programvare som lar deg lage, administrere og publisere digitalt innhold uten å måtte kode alt fra bunnen av.",
+    options: [
+      "Content Management System er en programvare som lar deg lage, administrere og publisere digitalt innhold uten å måtte kode alt fra bunnen av.",
+      "En type programvare for å analysere nettsidetrafikk.",
+      "Et verktøy for grafisk design av nettsider.",
+      "En spesifikk type nettside."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Headless CMS",
+    correct: "Er når det Kreves utviklerferdigheter for å lage frontend, koble til API-er, og sette opp løsningen. Gir full fleksibilitet til å bygge unike opplevelser og tilpasse systemet etter behov.",
+    options: [
+      "Er når det Kreves utviklerferdigheter for å lage frontend, koble til API-er, og sette opp løsningen. Gir full fleksibilitet til å bygge unike opplevelser og tilpasse systemet etter behov.",
+      "En type nettsted hvor du kan publisere innhold uten teknisk kunnskap.",
+      "En programvare for å administrere bilder og grafikk.",
+      "Et system for å administrere dokumenter."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Seamless CMS",
+    correct: "Krever lite eller ingen koding. Tilbyr et dra-og-slipp-grensesnitt for å bygge og designe nettsider. Leveres ofte med ferdige maler som gjør det enkelt å komme raskt i gang.",
+    options: [
+      "Krever lite eller ingen koding. Tilbyr et dra-og-slipp-grensesnitt for å bygge og designe nettsider. Leveres ofte med ferdige maler som gjør det enkelt å komme raskt i gang.",
+      "Et system som krever omfattende koding og programmering.",
+      "En type innholdsstyring for store organisasjoner.",
+      "En løsning for å håndtere API-er."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Component Content Management System (CCMS)",
+    correct: "Administrerer innhold som små, gjenbrukbare komponenter (f.eks. tekstblokker, bilder, videoer). Hensiktsmessig for teknisk dokumentasjon, der samme innhold brukes i ulike dokumenter eller kanaler.",
+    options: [
+      "Administrerer innhold som små, gjenbrukbare komponenter (f.eks. tekstblokker, bilder, videoer). Hensiktsmessig for teknisk dokumentasjon, der samme innhold brukes i ulike dokumenter eller kanaler.",
+      "En type system for å organisere bilder og video.",
+      "Et verktøy for å lage dynamiske nettsider.",
+      "En programvare for å administrere kundedata."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Document Management System (DMS)",
+    correct: "Lagrer, organiserer og håndterer digitale dokumenter. Fokus på versjonskontroll, tilgangsstyring og samarbeid.",
+    options: [
+      "Lagrer, organiserer og håndterer digitale dokumenter. Fokus på versjonskontroll, tilgangsstyring og samarbeid.",
+      "En type system for å lage nettsider.",
+      "Et verktøy for å publisere artikler på internett.",
+      "Et system for å administrere bilder og media."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Enterprise Content Management System (ECM)",
+    correct: "Et helhetlig system som administrerer alt innhold i en organisasjon, inkludert dokumenter, data, e-poster og digitale medier. Gir tilgangskontroll, automatisering og integrasjon på tvers av avdelinger for bedre arbeidsflyt.",
+    options: [
+      "Et helhetlig system som administrerer alt innhold i en organisasjon, inkludert dokumenter, data, e-poster og digitale medier. Gir tilgangskontroll, automatisering og integrasjon på tvers av avdelinger for bedre arbeidsflyt.",
+      "Et system for å administrere nettsideinnhold.",
+      "En type dokumenthåndteringssystem.",
+      "En plattform for sosial mediehåndtering."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Web Content Management System (WCMS)",
+    correct: "Spesifikt for å lage og administrere innhold på nettsider. Lar brukere publisere og oppdatere innhold uten teknisk kunnskap.",
+    options: [
+      "Spesifikt for å lage og administrere innhold på nettsider. Lar brukere publisere og oppdatere innhold uten teknisk kunnskap.",
+      "Et verktøy for å administrere dokumenter.",
+      "En programvare for å lage visuelle design.",
+      "En plattform for å utvikle mobile applikasjoner."
+    ]
+  },
+  {
+    type: "definition",
+    word: "Digital Asset Management System (DAM)",
+    correct: "Administrerer digitale medier som bilder, videoer, grafikk og lydfiler. Fokus på lagring, organisering og distribusjon av medieinnhold.",
+    options: [
+      "Administrerer digitale medier som bilder, videoer, grafikk og lydfiler. Fokus på lagring, organisering og distribusjon av medieinnhold.",
+      "En type innholdsstyringssystem for nettsider.",
+      "Et verktøy for å organisere kundedata.",
+      "En løsning for å administrere tekniske dokumenter."
+    ]
+  }
+
+
+
+
+
+
+
+
+
+         
         ];
 
         // Shuffle array helper
