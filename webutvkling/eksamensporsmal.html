@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webutvikling Eksamen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #0066cc;
+        }
+        .question {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 5px;
+        }
+        .question h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 5px 0;
+        }
+        .options button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .options button:hover {
+            background-color: #eee;
+        }
+        button.submit {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .options button.correct {
+            background-color: #c8e6c9;
+            border-color: #4caf50;
+        }
+        .options button.wrong {
+            background-color: #ffcdd2;
+            border-color: #f44336;
+        }
+        .results {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Webutvikling Eksamen</h1>
+    <div id="quiz"></div>
+    <button class="submit" onclick="submitQuiz()">Lever Oppgaven</button>
+    <div class="results" id="results"></div>
+
+    <script>
+        const questions = [
+            { type: "definition", word: "!DOCTYPE HTML", correct: "Erklæring som definerer HTML-versjonen for nettleseren.", options: ["Språk for å lage og strukturere nettsider.", "Erklæring som definerer HTML-versjonen for nettleseren.", "Kodeelementer som definerer struktur og innhold på en nettside."] },
+            { type: "definition", word: "HTML", correct: "Språk for å lage og strukturere nettsider.", options: ["Språk for å lage og strukturere nettsider.", "Betydning og mening av innholdet i koden.", "Programmeringsspråk som legger til interaktivitet på nettsider."] },
+            { type: "definition", word: "Javascript", correct: "Programmeringsspråk som legger til interaktivitet på nettsider.", options: ["Programmeringsspråk som legger til interaktivitet på nettsider.", "Språk for å lage og strukturere nettsider.", "Erklæring som definerer HTML-versjonen for nettleseren."] },
+            { type: "definition", word: "Tagger", correct: "Kodeelementer som definerer struktur og innhold på en nettside.", options: ["Kodeelementer som definerer struktur og innhold på en nettside.", "Betydning og mening av innholdet i koden.", "Språk for å lage og strukturere nettsider."] },
+            { type: "word", definition: "Informasjon om nettsiden, som ikke vises direkte, f.eks. beskrivelse og tegnsett.", correct: "Metadata", options: ["Metadata", "Semantikk", "UU"] },
+            { type: "word", definition: "Metoder for å gjøre en nettside mer synlig i søkemotorer som Google.", correct: "SEO", options: ["SEO", "Tilgjengelighet", "CSS"] },
+            { type: "definition", word: "CSS", correct: "Språk for å styre utseendet og layouten til en nettside.", options: ["Språk for å styre utseendet og layouten til en nettside.", "Språk for å lage og strukturere nettsider.", "Kode som markerer begynnelsen og slutten av et element."] },
+            { type: "definition", word: "URL", correct: "Nettadressen som brukes for å finne en nettside.", options: ["Nettadressen som brukes for å finne en nettside.", "Datamaskin eller programvare som leverer data, tjenester eller ressurser til andre datamaskiner over et nettverk.", "Systemet av sammenkoblede dokumenter og ressurser på internett."] },
+            { type: "word", definition: "En HTML-tag som brukes til å definere en navigasjonsmeny på en webside.", correct: "NAV", options: ["NAV", "Header", "Footer"] },
+            // ... (legg til alle andre spørsmål her)
+        ];
+
+        // Shuffle array helper
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Initialize quiz
+        function loadQuiz() {
+            shuffle(questions); // Shuffle questions
+            const quizDiv = document.getElementById('quiz');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `<h2>${q.type === 'definition' ? `Hva betyr "${q.word}"?` : `Hva er ordet for: "${q.definition}"?`}</h2>`;
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options';
+                const options = [...q.options];
+                shuffle(options); // Shuffle options
+                options.forEach(option => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<button onclick="selectOption(this, ${index}, '${option}')">${option}</button>`;
+                    optionsList.appendChild(li);
+                });
+                questionDiv.appendChild(optionsList);
+                quizDiv.appendChild(questionDiv);
+            });
+        }
+
+        const answers = {};
+
+        function selectOption(button, questionIndex, selectedOption) {
+            answers[questionIndex] = selectedOption;
+            // Highlight selected button
+            const buttons = button.parentElement.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => btn.style.backgroundColor = '#f9f9f9');
+            button.style.backgroundColor = '#d0ebff';
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const quizDiv = document.getElementById('quiz');
+            quizDiv.querySelectorAll('.question').forEach((questionDiv, index) => {
+                const correctAnswer = questions[index].correct;
+                const selectedAnswer = answers[index];
+                const buttons = questionDiv.querySelectorAll('button');
+                buttons.forEach(button => {
+                    if (button.textContent === correctAnswer) {
+                        button.classList.add('correct');
+                    }
+                    if (button.textContent === selectedAnswer && selectedAnswer !== correctAnswer) {
+                        button.classList.add('wrong');
+                    }
+                });
+                if (selectedAnswer === correctAnswer) score++;
+            });
+            document.getElementById('results').innerHTML = `<h2>Du fikk ${score} av ${questions.length} poeng!</h2>`;
+        }
+
+        // Load quiz on page load
+        loadQuiz();
+    </script>
+</body>
+</html>
